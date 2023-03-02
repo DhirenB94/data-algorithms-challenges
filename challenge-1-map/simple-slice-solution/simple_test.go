@@ -107,21 +107,3 @@ func getNextString(str string) string {
 	}
 	return result
 }
-
-//extract to function
-//newSlice := simple.NewSliceKeyValues()
-//
-//var oneTwo []simple.SimpleKeyValue
-//one := simple.SimpleKeyValue{
-//Key:   1,
-//Value: "one",
-//}
-//two := simple.SimpleKeyValue{
-//Key:   2,
-//Value: "two",
-//}
-//
-//oneTwo = append(oneTwo, one, two)
-//newSlice.KeyValues = oneTwo
-//
-//fmt.Println(newSlice)
