@@ -1,6 +1,8 @@
 package simple
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type SimpleKeyValue struct {
 	Key   int
@@ -32,6 +34,7 @@ func (s *SliceKeyValues) Get(key int) string {
 	fmt.Printf("element with key: %v not present\n", key)
 	return ""
 }
+
 func (s *SliceKeyValues) Remove(key int) SimpleKeyValue {
 	keyIndex := s.IndexOf(key)
 	value := s.Get(key)
@@ -48,7 +51,21 @@ func (s *SliceKeyValues) Remove(key int) SimpleKeyValue {
 	}
 }
 
-func (s SliceKeyValues) IndexOf(key int) int {
+func (s *SliceKeyValues) Set(key int, value string) string {
+	keyIndex := s.IndexOf(key)
+	oldValue := s.Get(key)
+	if keyIndex == -1 {
+		s.KeyValues = append(s.KeyValues, SimpleKeyValue{
+			Key:   key,
+			Value: value,
+		})
+		return ""
+	}
+	s.KeyValues[keyIndex].Value = value
+	return oldValue
+}
+
+func (s *SliceKeyValues) IndexOf(key int) int {
 	for i, k := range s.KeyValues {
 		if k.Key == key {
 			return i
