@@ -93,28 +93,13 @@ func TestSimplekeyValue(t *testing.T) {
 			assert.Equal(t, expectedUpdatedElement, sliceKeyValues.KeyValues[3])
 		})
 	})
-	t.Run("Index postition of key", func(t *testing.T) {
-		t.Run("returns index position if key exists", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(10)
-
-			indexPosition := sliceKeyValues.IndexOf(3)
-			assert.Equal(t, 3, indexPosition)
-
-		})
-		t.Run("return -1 if key does not exist", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(10)
-
-			indexPosition := sliceKeyValues.IndexOf(30)
-			assert.Equal(t, -1, indexPosition)
-		})
-	})
 }
-func sliceKeyValuesWithLength(size int) *simple.SliceKeyValues {
-	sliceKeyValues := simple.NewSliceKeyValues()
-	initialSlice := newSlice(size)
-	sliceKeyValues.KeyValues = initialSlice
 
-	return sliceKeyValues
+func sliceKeyValuesWithLength(size int) *simple.SliceKeyValues {
+	newSliceKeyValues := &simple.SliceKeyValues{}
+	newSliceKeyValues.KeyValues = newSlice(size)
+
+	return newSliceKeyValues
 }
 
 func newSlice(size int) []simple.SimpleKeyValue {

@@ -13,12 +13,8 @@ type SliceKeyValues struct {
 	KeyValues []SimpleKeyValue
 }
 
-func NewSliceKeyValues() *SliceKeyValues {
-	return &SliceKeyValues{}
-}
-
 func (s *SliceKeyValues) Has(key int) bool {
-	if s.IndexOf(key) == -1 {
+	if s.indexOf(key) == -1 {
 		fmt.Printf("element with key: %v not present\n", key)
 		return false
 	}
@@ -36,7 +32,7 @@ func (s *SliceKeyValues) Get(key int) string {
 }
 
 func (s *SliceKeyValues) Remove(key int) SimpleKeyValue {
-	keyIndex := s.IndexOf(key)
+	keyIndex := s.indexOf(key)
 	value := s.Get(key)
 	if keyIndex == -1 {
 		fmt.Printf("Key: %v, not found\n", key)
@@ -52,7 +48,7 @@ func (s *SliceKeyValues) Remove(key int) SimpleKeyValue {
 }
 
 func (s *SliceKeyValues) Set(key int, value string) string {
-	keyIndex := s.IndexOf(key)
+	keyIndex := s.indexOf(key)
 	oldValue := s.Get(key)
 	if keyIndex == -1 {
 		s.KeyValues = append(s.KeyValues, SimpleKeyValue{
@@ -65,7 +61,7 @@ func (s *SliceKeyValues) Set(key int, value string) string {
 	return oldValue
 }
 
-func (s *SliceKeyValues) IndexOf(key int) int {
+func (s *SliceKeyValues) indexOf(key int) int {
 	for i, k := range s.KeyValues {
 		if k.Key == key {
 			return i
