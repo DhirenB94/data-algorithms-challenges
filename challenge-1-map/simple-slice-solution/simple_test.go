@@ -40,15 +40,11 @@ func TestSimplekeyValue(t *testing.T) {
 		})
 	})
 	t.Run("Remove", func(t *testing.T) {
-		t.Run("removes the element with given key and returns it", func(t *testing.T) {
-			expectedRemovedElement := simple.SimpleKeyValue{
-				Key:   3,
-				Value: "d",
-			}
+		t.Run("removes the element with given key", func(t *testing.T) {
 			sliceKeyValues := sliceKeyValuesWithLength(10)
 
 			removedElement := sliceKeyValues.Remove(3)
-			assert.Equal(t, expectedRemovedElement, removedElement)
+			assert.Equal(t, "d", removedElement)
 
 			assert.Len(t, sliceKeyValues.KeyValues, 9)
 		})

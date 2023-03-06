@@ -31,20 +31,17 @@ func (s *SliceKeyValues) Get(key int) string {
 	return ""
 }
 
-func (s *SliceKeyValues) Remove(key int) SimpleKeyValue {
+func (s *SliceKeyValues) Remove(key int) string {
 	keyIndex := s.indexOf(key)
 	value := s.Get(key)
 	if keyIndex == -1 {
 		fmt.Printf("Key: %v, not found\n", key)
-		return SimpleKeyValue{}
+		return ""
 	}
 	s.KeyValues = append(s.KeyValues[:keyIndex], s.KeyValues[keyIndex+1:]...)
 
 	fmt.Printf("removed element with key: %v and value: :%v\n", key, value)
-	return SimpleKeyValue{
-		Key:   key,
-		Value: value,
-	}
+	return value
 }
 
 func (s *SliceKeyValues) Set(key int, value string) string {
