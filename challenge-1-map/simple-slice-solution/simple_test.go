@@ -2,16 +2,20 @@ package simple_test
 
 import (
 	"data/challenge-1-map/simple-slice-solution"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestSimplekeyValue(t *testing.T) {
 	t.Run("Has", func(t *testing.T) {
 		t.Run("return true if key is present", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(10)
+			sliceKeyValues := sliceKeyValuesWithLength(50)
 
-			answer := sliceKeyValues.Has(5)
+			timeNow := time.Now()
+			answer := sliceKeyValues.Has(45)
+			fmt.Println(time.Since(timeNow))
 			assert.Equal(t, true, answer)
 		})
 		t.Run("return false if key is not present", func(t *testing.T) {
@@ -26,7 +30,8 @@ func TestSimplekeyValue(t *testing.T) {
 			expectedValue := "d"
 			sliceKeyValues := sliceKeyValuesWithLength(10)
 
-			value := sliceKeyValues.Get(3)
+			value, isPresent := sliceKeyValues.Get(3)
+			assert.True(t, isPresent)
 
 			assert.Equal(t, expectedValue, value)
 
@@ -34,7 +39,8 @@ func TestSimplekeyValue(t *testing.T) {
 		t.Run("returns empty string if key not present", func(t *testing.T) {
 			sliceKeyValues := sliceKeyValuesWithLength(10)
 
-			value := sliceKeyValues.Get(100)
+			value, isPresent := sliceKeyValues.Get(100)
+			assert.False(t, isPresent)
 
 			assert.Empty(t, value)
 		})
@@ -43,7 +49,8 @@ func TestSimplekeyValue(t *testing.T) {
 		t.Run("removes the element with given key", func(t *testing.T) {
 			sliceKeyValues := sliceKeyValuesWithLength(10)
 
-			removedElement := sliceKeyValues.Remove(3)
+			removedElement, isPresent := sliceKeyValues.Remove(3)
+			assert.True(t, isPresent)
 			assert.Equal(t, "d", removedElement)
 
 			assert.Len(t, sliceKeyValues.KeyValues, 9)
@@ -51,7 +58,8 @@ func TestSimplekeyValue(t *testing.T) {
 		t.Run("if element is not present, returns nil", func(t *testing.T) {
 			sliceKeyValues := sliceKeyValuesWithLength(10)
 
-			removedElement := sliceKeyValues.Remove(30)
+			removedElement, isPresent := sliceKeyValues.Remove(30)
+			assert.False(t, isPresent)
 
 			assert.Empty(t, removedElement)
 			assert.Len(t, sliceKeyValues.KeyValues, 10)

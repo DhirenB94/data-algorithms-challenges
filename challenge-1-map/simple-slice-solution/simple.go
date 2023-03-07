@@ -21,32 +21,31 @@ func (s *SliceKeyValues) Has(key int) bool {
 	return true
 }
 
-func (s *SliceKeyValues) Get(key int) string {
+func (s *SliceKeyValues) Get(key int) (string, bool) {
 	for _, k := range s.KeyValues {
 		if k.Key == key {
-			return k.Value
+			return k.Value, true
 		}
 	}
 	fmt.Printf("element with key: %v not present\n", key)
-	return ""
+	return "", false
 }
 
-func (s *SliceKeyValues) Remove(key int) string {
+func (s *SliceKeyValues) Remove(key int) (string, bool) {
 	keyIndex := s.indexOf(key)
-	value := s.Get(key)
 	if keyIndex == -1 {
 		fmt.Printf("Key: %v, not found\n", key)
-		return ""
+		return "", false
 	}
+	value, isPresent := s.Get(key)
 	s.KeyValues = append(s.KeyValues[:keyIndex], s.KeyValues[keyIndex+1:]...)
 
 	fmt.Printf("removed element with key: %v and value: :%v\n", key, value)
-	return value
+	return value, isPresent
 }
 
 func (s *SliceKeyValues) Set(key int, value string) string {
 	keyIndex := s.indexOf(key)
-	oldValue := s.Get(key)
 	if keyIndex == -1 {
 		s.KeyValues = append(s.KeyValues, SimpleKeyValue{
 			Key:   key,
@@ -54,6 +53,7 @@ func (s *SliceKeyValues) Set(key int, value string) string {
 		})
 		return ""
 	}
+	oldValue, _ := s.Get(key)
 	s.KeyValues[keyIndex].Value = value
 	return oldValue
 }
