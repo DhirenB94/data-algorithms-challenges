@@ -1,6 +1,8 @@
 package hashing_solution
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Node struct {
 	Key   int
@@ -31,7 +33,7 @@ func (h *HashMap) Has(key int) bool {
 	return false
 }
 
-func (h HashMap) Get(key int) (string, bool) {
+func (h *HashMap) Get(key int) (string, bool) {
 	indexPosition := hash(key)
 	if h.Buckets[indexPosition] != nil {
 		//check if it is in the linked list of the index position
@@ -44,4 +46,28 @@ func (h HashMap) Get(key int) (string, bool) {
 	}
 	fmt.Printf("element with key: %v not present\n", key)
 	return "", false
+}
+
+func (h *HashMap) Set(key int, value string) string {
+	index := hash(key)
+	newNode := &Node{
+		Key:   key,
+		Value: value,
+	}
+	//if index is empty, can insert the node
+	if h.Buckets[index] == nil {
+		h.Buckets[index] = newNode
+	}
+	//if some nodes already exists at that index position, loop through the linked-list
+	firstNodeInList := h.Buckets[index]
+	for n := firstNodeInList; n != nil; n = n.Next {
+		//if the key exists within the list, update its value
+		if n.Key == key {
+			n.Value = value
+			return value
+		}
+		//if the key does not exist, add to the end of the linked list
+		firstNodeInList.Next = newNode
+	}
+	return value
 }
