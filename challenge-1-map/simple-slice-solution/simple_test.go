@@ -2,10 +2,8 @@ package simple_test
 
 import (
 	"data/challenge-1-map/simple-slice-solution"
-	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
-	"time"
 )
 
 func TestSimplekeyValue(t *testing.T) {
@@ -13,9 +11,7 @@ func TestSimplekeyValue(t *testing.T) {
 		t.Run("return true if key is present", func(t *testing.T) {
 			sliceKeyValues := sliceKeyValuesWithLength(50)
 
-			timeNow := time.Now()
 			answer := sliceKeyValues.Has(45)
-			fmt.Println(time.Since(timeNow))
 			assert.Equal(t, true, answer)
 		})
 		t.Run("return false if key is not present", func(t *testing.T) {
