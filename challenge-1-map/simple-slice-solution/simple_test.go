@@ -2,8 +2,10 @@ package simple_test
 
 import (
 	"data/challenge-1-map/simple-slice-solution"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
+	"time"
 )
 
 func TestSimplekeyValue(t *testing.T) {
@@ -11,7 +13,10 @@ func TestSimplekeyValue(t *testing.T) {
 		t.Run("return true if key is present", func(t *testing.T) {
 			sliceKeyValues := sliceKeyValuesWithLength(50)
 
+			timeNow := time.Now()
 			answer := sliceKeyValues.Has(45)
+			fmt.Println(time.Since(timeNow))
+
 			assert.Equal(t, true, answer)
 		})
 		t.Run("return false if key is not present", func(t *testing.T) {
@@ -23,10 +28,13 @@ func TestSimplekeyValue(t *testing.T) {
 	})
 	t.Run("Get", func(t *testing.T) {
 		t.Run("gets the value if key present", func(t *testing.T) {
-			expectedValue := "d"
-			sliceKeyValues := sliceKeyValuesWithLength(10)
+			expectedValue := "t"
+			sliceKeyValues := sliceKeyValuesWithLength(50)
 
-			value, isPresent := sliceKeyValues.Get(3)
+			timeNow := time.Now()
+			value, isPresent := sliceKeyValues.Get(45)
+			fmt.Println(time.Since(timeNow))
+
 			assert.True(t, isPresent)
 
 			assert.Equal(t, expectedValue, value)
@@ -43,13 +51,16 @@ func TestSimplekeyValue(t *testing.T) {
 	})
 	t.Run("Remove", func(t *testing.T) {
 		t.Run("removes the element with given key", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(10)
+			sliceKeyValues := sliceKeyValuesWithLength(50)
 
-			removedElement, isPresent := sliceKeyValues.Remove(3)
+			timeNow := time.Now()
+			removedElement, isPresent := sliceKeyValues.Remove(45)
+			fmt.Println(time.Since(timeNow))
+
 			assert.True(t, isPresent)
-			assert.Equal(t, "d", removedElement)
+			assert.Equal(t, "t", removedElement)
 
-			assert.Len(t, sliceKeyValues.KeyValues, 9)
+			assert.Len(t, sliceKeyValues.KeyValues, 49)
 		})
 		t.Run("if element is not present, returns nil", func(t *testing.T) {
 			sliceKeyValues := sliceKeyValuesWithLength(10)
@@ -67,11 +78,13 @@ func TestSimplekeyValue(t *testing.T) {
 				Key:   100,
 				Value: "zzz",
 			}
-			sliceKeyValues := sliceKeyValuesWithLength(15)
+			sliceKeyValues := sliceKeyValuesWithLength(50)
 
+			timeNow := time.Now()
 			sliceKeyValues.Set(100, "zzz")
+			fmt.Println(time.Since(timeNow))
 
-			assert.Len(t, sliceKeyValues.KeyValues, 16)
+			assert.Len(t, sliceKeyValues.KeyValues, 51)
 			lastElement := len(sliceKeyValues.KeyValues) - 1
 			assert.Equal(t, expectedAddedElement, sliceKeyValues.KeyValues[lastElement])
 		})
@@ -87,7 +100,9 @@ func TestSimplekeyValue(t *testing.T) {
 			sliceKeyValues := sliceKeyValuesWithLength(15)
 			assert.Equal(t, originalElement, sliceKeyValues.KeyValues[3])
 
+			timeNow := time.Now()
 			sliceKeyValues.Set(3, "zzz")
+			fmt.Println(time.Since(timeNow))
 
 			assert.Len(t, sliceKeyValues.KeyValues, 15)
 			assert.Equal(t, expectedUpdatedElement, sliceKeyValues.KeyValues[3])

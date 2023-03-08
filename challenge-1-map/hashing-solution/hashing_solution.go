@@ -66,8 +66,30 @@ func (h *HashMap) Set(key int, value string) string {
 			n.Value = value
 			return value
 		}
-		//if the key does not exist, add to the end of the linked list
-		firstNodeInList.Next = newNode
+		// If it doesnt exist, add the new node to the end of the list
+		if n.Next == nil {
+			n.Next = newNode
+			return value
+		}
 	}
+	//if the key does not exist, add to the end of the linked list
 	return value
+}
+
+func (h *HashMap) Remove(key int) (string, bool) {
+	indexPosition := hash(key)
+	oldValue, _ := h.Get(key)
+	//handle when you need to remove the 1st node in the list
+	if h.Buckets[indexPosition] != nil && h.Buckets[indexPosition].Key == key {
+		h.Buckets[indexPosition] = h.Buckets[indexPosition].Next
+		return oldValue, true
+	}
+	//handle when you need to remove nth node in a list
+	for n := h.Buckets[indexPosition]; n != nil; n = n.Next {
+		if n.Next != nil && n.Next.Key == key {
+			n.Next = n.Next.Next
+			return oldValue, true
+		}
+	}
+	return "", false
 }
