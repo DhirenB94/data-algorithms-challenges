@@ -1,7 +1,7 @@
 package simple_test
 
 import (
-	"data/challenge-1-map/simple-slice-solution"
+	"data/challenge-1-map-simple/simple-slice-solution"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"

@@ -1,7 +1,7 @@
 package hashing_solution_test
 
 import (
-	hashing_solution "data/challenge-1-map/hashing-solution"
+	"data/challenge-2-map-hashtable/hashing-solution"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
