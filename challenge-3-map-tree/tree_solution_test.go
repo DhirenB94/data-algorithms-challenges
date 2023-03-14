@@ -100,6 +100,17 @@ func TestBinarySearchTree(t *testing.T) {
 			assert.Equal(t, "newValue", getValue)
 			assert.True(t, isPresent)
 		})
+		t.Run("able to insert a node if root node is nil", func(t *testing.T) {
+			newBst := tree.NewBinarySearchTree(nil)
+			answer, isSet := newBst.Set(200, "hhh")
+			assert.Empty(t, answer)
+			assert.True(t, isSet)
+
+			value, got := newBst.Get(200)
+			assert.Equal(t, "hhh", value)
+			assert.True(t, got)
+		})
+
 	})
 	t.Run("Remove", func(t *testing.T) {
 		t.Run("", func(t *testing.T) {

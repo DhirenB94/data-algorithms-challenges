@@ -25,6 +25,14 @@ func (bst *BinarySearchTree) Get(key int) (string, bool) {
 }
 
 func (bst *BinarySearchTree) Set(key int, value string) (string, bool) {
+	newNode := &TreeNode{
+		Key:   key,
+		Value: value,
+	}
+	if bst.Root == nil {
+		bst.Root = newNode
+		return "", true
+	}
 	return insertNode(bst.Root, key, value)
 }
 
@@ -56,11 +64,7 @@ func insertNode(node *TreeNode, key int, value string) (string, bool) {
 		Key:   key,
 		Value: value,
 	}
-	//if there's no root node or reached a leaf node, insert the node
-	if node == nil {
-		node = newNode
-		return "", true
-	}
+
 	//If the key is present update the value and return the old value
 	if key == node.Key {
 		oldValue := node.Value
