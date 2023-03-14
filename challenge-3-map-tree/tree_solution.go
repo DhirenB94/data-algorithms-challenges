@@ -24,8 +24,8 @@ func (bst *BinarySearchTree) Get(key int) (string, bool) {
 	return searchNode(bst.Root, key)
 }
 
-func (bst *BinarySearchTree) Set(key int, value string) string {
-	return ""
+func (bst *BinarySearchTree) Set(key int, value string) (string, bool) {
+	return insertNode(bst.Root, key, value)
 }
 
 func (bst *BinarySearchTree) Remove(key int) (string, bool) {
@@ -47,6 +47,39 @@ func searchNode(treeNode *TreeNode, key int) (string, bool) {
 	//if key is greater than the key of the current node, keep searching to the Right
 	if key > treeNode.Key {
 		return searchNode(treeNode.RightNode, key)
+	}
+	return "", false
+}
+
+func insertNode(node *TreeNode, key int, value string) (string, bool) {
+	newNode := &TreeNode{
+		Key:   key,
+		Value: value,
+	}
+	//if there's no root node or reached a leaf node, insert the node
+	if node == nil {
+		node = newNode
+		return "", true
+	}
+	//If the key is present update the value and return the old value
+	if key == node.Key {
+		oldValue := node.Value
+		node.Value = value
+		return oldValue, true
+	}
+	if key < node.Key {
+		if node.LeftNode == nil {
+			node.LeftNode = newNode
+			return "", true
+		}
+		return insertNode(node.LeftNode, key, value)
+	}
+	if key > node.Key {
+		if node.RightNode == nil {
+			node.RightNode = newNode
+			return "", true
+		}
+		return insertNode(node.RightNode, key, value)
 	}
 	return "", false
 }

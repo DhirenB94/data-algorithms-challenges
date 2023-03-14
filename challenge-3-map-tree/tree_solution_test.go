@@ -64,8 +64,38 @@ func TestBinarySearchTree(t *testing.T) {
 		})
 	})
 	t.Run("Set", func(t *testing.T) {
-		t.Run("", func(t *testing.T) {
+		t.Run("insert a node if the key is not present", func(t *testing.T) {
+			rootNode := &tree.TreeNode{
+				Key:   50,
+				Value: "abc",
+			}
+			newBst := tree.NewBinarySearchTree(rootNode)
 
+			value, isSet := newBst.Set(105, "ddd")
+			assert.Empty(t, value)
+			assert.True(t, isSet)
+
+			getValue, isPresent := newBst.Get(105)
+			assert.Equal(t, "ddd", getValue)
+			assert.True(t, isPresent)
+		})
+		t.Run("if the key is present, insert new value and return old value", func(t *testing.T) {
+			rootNode := &tree.TreeNode{
+				Key:   50,
+				Value: "abc",
+			}
+			newBst := tree.NewBinarySearchTree(rootNode)
+
+			setValue, _ := newBst.Set(105, "originalValue")
+			assert.Empty(t, setValue)
+
+			oldValue, isSet2 := newBst.Set(105, "newValue")
+			assert.Equal(t, "originalValue", oldValue)
+			assert.True(t, isSet2)
+
+			getValue, isPresent := newBst.Get(105)
+			assert.Equal(t, "newValue", getValue)
+			assert.True(t, isPresent)
 		})
 	})
 	t.Run("Remove", func(t *testing.T) {
