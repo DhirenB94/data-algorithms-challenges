@@ -77,33 +77,39 @@ func TestHashKeys(t *testing.T) {
 			hashMap := newHashMap(50)
 
 			timeNow := time.Now()
-			newValue := hashMap.Set(45, "foo")
+			setValue, isSet := hashMap.Set(45, "foo")
 			fmt.Println(time.Since(timeNow))
 
-			getValue, _ := hashMap.Get(45)
-			assert.Equal(t, newValue, hashMap.Buckets[45].Value)
-			assert.Equal(t, newValue, getValue)
+			assert.Empty(t, setValue)
+			assert.True(t, isSet)
 
-			newValue2 := hashMap.Set(95, "bar")
+			getValue, _ := hashMap.Get(45)
+			assert.Equal(t, "foo", getValue)
+			assert.Equal(t, getValue, hashMap.Buckets[45].Value)
+
+			setValue2, _ := hashMap.Set(95, "bar")
+			assert.Empty(t, setValue2)
+
 			getValue2, _ := hashMap.Get(95)
-			assert.Equal(t, newValue2, hashMap.Buckets[45].Next.Value)
-			assert.Equal(t, newValue2, getValue2)
+			assert.Equal(t, "bar", getValue2)
+			assert.Equal(t, getValue2, hashMap.Buckets[45].Next.Value)
 
 		})
 		t.Run("if element with key exists already, update its value", func(t *testing.T) {
 			hashMap := newHashMap(50)
 
-			oldValue := hashMap.Set(45, "foo")
+			setValue, _ := hashMap.Set(45, "foo")
+			assert.Empty(t, setValue)
 
 			timeNow := time.Now()
-			newValue := hashMap.Set(45, "bar")
+			oldValue, isSet := hashMap.Set(45, "bar")
 			fmt.Println(time.Since(timeNow))
 
-			getValue, _ := hashMap.Get(45)
-			fmt.Println(getValue)
+			assert.Equal(t, "foo", oldValue)
+			assert.True(t, isSet)
 
-			assert.Equal(t, newValue, getValue)
-			assert.NotEqual(t, oldValue, getValue)
+			getValue, _ := hashMap.Get(45)
+			assert.Equal(t, "bar", getValue)
 		})
 	})
 	t.Run("Remove", func(t *testing.T) {

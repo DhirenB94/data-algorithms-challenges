@@ -48,7 +48,7 @@ func (h *HashMap) Get(key int) (string, bool) {
 	return "", false
 }
 
-func (h *HashMap) Set(key int, value string) string {
+func (h *HashMap) Set(key int, value string) (string, bool) {
 	index := hash(key)
 	newNode := &Node{
 		Key:   key,
@@ -57,23 +57,24 @@ func (h *HashMap) Set(key int, value string) string {
 	//if index is empty, can insert the node
 	if h.Buckets[index] == nil {
 		h.Buckets[index] = newNode
+		return "", true
 	}
 	//if some nodes already exists at that index position, loop through the linked-list
 	firstNodeInList := h.Buckets[index]
 	for n := firstNodeInList; n != nil; n = n.Next {
 		//if the key exists within the list, update its value
 		if n.Key == key {
+			oldValue := n.Value
 			n.Value = value
-			return value
+			return oldValue, true
 		}
 		// If it doesnt exist, add the new node to the end of the list
 		if n.Next == nil {
 			n.Next = newNode
-			return value
+			return "", true
 		}
 	}
-	//if the key does not exist, add to the end of the linked list
-	return value
+	return "", false
 }
 
 func (h *HashMap) Remove(key int) (string, bool) {
