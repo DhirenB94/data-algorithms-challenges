@@ -8,7 +8,7 @@ import (
 
 func TestBinarySearchTree(t *testing.T) {
 	t.Run("Has", func(t *testing.T) {
-		t.Run("return true when the element is found", func(t *testing.T) {
+		t.Run("return true when the element is found and false when it is not", func(t *testing.T) {
 			rootNode := &tree.TreeNode{
 				Key:   50,
 				Value: "abc",
@@ -25,13 +25,42 @@ func TestBinarySearchTree(t *testing.T) {
 			shouldNotContain := newBst.Has(99)
 			assert.False(t, shouldNotContain)
 		})
-		t.Run("return false when the element is found", func(t *testing.T) {
-
-		})
 	})
 	t.Run("Get", func(t *testing.T) {
-		t.Run("", func(t *testing.T) {
+		t.Run("return the value and true when the element is found", func(t *testing.T) {
+			rootNode := &tree.TreeNode{
+				Key:   50,
+				Value: "abc",
+			}
+			insertTestNode(rootNode, 100, "def")
+			insertTestNode(rootNode, 25, "jkl")
+			insertTestNode(rootNode, 10, "")
 
+			newBst := tree.NewBinarySearchTree(rootNode)
+
+			value, isPresent := newBst.Get(25)
+			assert.Equal(t, "jkl", value)
+			assert.True(t, isPresent)
+
+			value2, isPresent2 := newBst.Get(10)
+			assert.Empty(t, value2)
+			assert.True(t, isPresent2)
+
+		})
+		t.Run("return empty string and false when value is not found", func(t *testing.T) {
+			rootNode := &tree.TreeNode{
+				Key:   50,
+				Value: "abc",
+			}
+			insertTestNode(rootNode, 100, "def")
+			insertTestNode(rootNode, 25, "jkl")
+			insertTestNode(rootNode, 10, "")
+
+			newBst := tree.NewBinarySearchTree(rootNode)
+
+			value, isPresent := newBst.Get(35)
+			assert.Empty(t, value)
+			assert.False(t, isPresent)
 		})
 	})
 	t.Run("Set", func(t *testing.T) {

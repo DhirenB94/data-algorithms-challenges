@@ -16,11 +16,12 @@ func NewBinarySearchTree(treeNode *TreeNode) *BinarySearchTree {
 }
 
 func (bst *BinarySearchTree) Has(key int) bool {
-	return searchNode(bst.Root, key)
+	_, isPresent := searchNode(bst.Root, key)
+	return isPresent
 }
 
 func (bst *BinarySearchTree) Get(key int) (string, bool) {
-	return "", false
+	return searchNode(bst.Root, key)
 }
 
 func (bst *BinarySearchTree) Set(key int, value string) string {
@@ -31,13 +32,13 @@ func (bst *BinarySearchTree) Remove(key int) (string, bool) {
 	return "", false
 }
 
-func searchNode(treeNode *TreeNode, key int) bool {
+func searchNode(treeNode *TreeNode, key int) (string, bool) {
 	//in the case of an empty BST or when you reach a leaf node
 	if treeNode == nil {
-		return false
+		return "", false
 	}
 	if key == treeNode.Key {
-		return true
+		return treeNode.Value, true
 	}
 	//if key is smaller than the key of the current node, keep searching to the left
 	if key < treeNode.Key {
@@ -47,5 +48,5 @@ func searchNode(treeNode *TreeNode, key int) bool {
 	if key > treeNode.Key {
 		return searchNode(treeNode.RightNode, key)
 	}
-	return false
+	return "", false
 }
