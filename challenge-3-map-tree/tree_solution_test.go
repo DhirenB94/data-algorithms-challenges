@@ -13,12 +13,13 @@ func TestBinarySearchTree(t *testing.T) {
 				Key:   50,
 				Value: "abc",
 			}
-			insertTestNode(rootNode, 100, "def")
-			insertTestNode(rootNode, 75, "ghi")
-			insertTestNode(rootNode, 25, "jkl")
-			insertTestNode(rootNode, 1, "mno")
 
 			newBst := tree.NewBinarySearchTree(rootNode)
+
+			newBst.Set(100, "def")
+			newBst.Set(75, "ghi")
+			newBst.Set(25, "jkl")
+			newBst.Set(1, "mno")
 
 			shouldContain := newBst.Has(75)
 			assert.True(t, shouldContain)
@@ -32,11 +33,12 @@ func TestBinarySearchTree(t *testing.T) {
 				Key:   50,
 				Value: "abc",
 			}
-			insertTestNode(rootNode, 100, "def")
-			insertTestNode(rootNode, 25, "jkl")
-			insertTestNode(rootNode, 10, "")
 
 			newBst := tree.NewBinarySearchTree(rootNode)
+
+			newBst.Set(100, "def")
+			newBst.Set(25, "jkl")
+			newBst.Set(10, "")
 
 			value, isPresent := newBst.Get(25)
 			assert.Equal(t, "jkl", value)
@@ -52,11 +54,12 @@ func TestBinarySearchTree(t *testing.T) {
 				Key:   50,
 				Value: "abc",
 			}
-			insertTestNode(rootNode, 100, "def")
-			insertTestNode(rootNode, 25, "jkl")
-			insertTestNode(rootNode, 10, "")
 
 			newBst := tree.NewBinarySearchTree(rootNode)
+
+			newBst.Set(100, "def")
+			newBst.Set(25, "jkl")
+			newBst.Set(10, "")
 
 			value, isPresent := newBst.Get(35)
 			assert.Empty(t, value)
@@ -103,21 +106,4 @@ func TestBinarySearchTree(t *testing.T) {
 
 		})
 	})
-}
-
-func insertTestNode(node *tree.TreeNode, key int, value string) *tree.TreeNode {
-	if node == nil {
-		newNode := &tree.TreeNode{
-			Key:   key,
-			Value: value,
-		}
-		return newNode
-	}
-	if key < node.Key {
-		node.LeftNode = insertTestNode(node.LeftNode, key, value)
-	}
-	if key > node.Key {
-		node.RightNode = insertTestNode(node.RightNode, key, value)
-	}
-	return node
 }
