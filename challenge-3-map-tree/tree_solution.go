@@ -1,5 +1,7 @@
 package tree
 
+import "fmt"
+
 type TreeNode struct {
 	Key       int
 	Value     string
@@ -37,7 +39,11 @@ func (bst *BinarySearchTree) Set(key int, value string) (string, bool) {
 }
 
 func (bst *BinarySearchTree) Remove(key int) (string, bool) {
-	return "", false
+	if !bst.Has(key) {
+		return "", false
+	}
+	node := removeNode(bst.Root, key)
+	return node.Value, true
 }
 
 func searchNode(treeNode *TreeNode, key int) (string, bool) {
@@ -86,4 +92,30 @@ func insertNode(node *TreeNode, key int, value string) (string, bool) {
 		return insertNode(node.RightNode, key, value)
 	}
 	return "", false
+}
+
+func removeNode(node *TreeNode, key int) *TreeNode {
+	//if node == nil {
+	//	fmt.Println("node = nil")
+	//	return nil
+	//}
+
+	//Finding the key
+	if key < node.Key {
+		fmt.Println("key < node.key")
+		return removeNode(node.LeftNode, key)
+	}
+	if key > node.Key {
+		fmt.Println("key > node.key")
+		return removeNode(node.RightNode, key)
+	}
+	if key == node.Key {
+		//if the node to be removed is a leaf node
+
+		//if the node to be removed has a L/R subtree only
+
+		//if the node to be removed has BOTH subtrees
+
+	}
+	return nil
 }

@@ -113,8 +113,29 @@ func TestBinarySearchTree(t *testing.T) {
 
 	})
 	t.Run("Remove", func(t *testing.T) {
-		t.Run("", func(t *testing.T) {
+		t.Run("return empty string and false if node to be removed not present", func(t *testing.T) {
+			rootNode := &tree.TreeNode{
+				Key:   100,
+				Value: "100",
+			}
+			newBst := tree.NewBinarySearchTree(rootNode)
+			newBst.Set(75, "75")
+			newBst.Set(113, "113")
 
+			removed, wasRemoved := newBst.Remove(20)
+			assert.Empty(t, removed)
+			assert.False(t, wasRemoved)
+		})
+		t.Run("removes the element with the given key", func(t *testing.T) {
+			t.Run("when node to be removed is a leaf node", func(t *testing.T) {
+
+			})
+			t.Run("when node to be removed is a leaf node", func(t *testing.T) {
+
+			})
+			t.Run("when node to be removed is a leaf node", func(t *testing.T) {
+
+			})
 		})
 	})
 }
