@@ -1,7 +1,5 @@
 package tree
 
-import "fmt"
-
 type TreeNode struct {
 	Key       int
 	Value     string
@@ -39,11 +37,12 @@ func (bst *BinarySearchTree) Set(key int, value string) (string, bool) {
 }
 
 func (bst *BinarySearchTree) Remove(key int) (string, bool) {
-	if !bst.Has(key) {
+	getValue, isGot := bst.Get(key)
+	if !isGot {
 		return "", false
 	}
-	node := removeNode(bst.Root, key)
-	return node.Value, true
+	removeNode(bst.Root, key)
+	return getValue, true
 }
 
 func searchNode(treeNode *TreeNode, key int) (string, bool) {
@@ -95,23 +94,23 @@ func insertNode(node *TreeNode, key int, value string) (string, bool) {
 }
 
 func removeNode(node *TreeNode, key int) *TreeNode {
-	//if node == nil {
-	//	fmt.Println("node = nil")
-	//	return nil
-	//}
+	if node == nil {
+		return nil
+	}
 
 	//Finding the key
 	if key < node.Key {
-		fmt.Println("key < node.key")
-		return removeNode(node.LeftNode, key)
+		node.LeftNode = removeNode(node.LeftNode, key)
 	}
 	if key > node.Key {
-		fmt.Println("key > node.key")
-		return removeNode(node.RightNode, key)
+		node.RightNode = removeNode(node.LeftNode, key)
 	}
 	if key == node.Key {
 		//if the node to be removed is a leaf node
-
+		if node.LeftNode == nil && node.RightNode == nil {
+			node = nil
+			return nil
+		}
 		//if the node to be removed has a L/R subtree only
 
 		//if the node to be removed has BOTH subtrees
