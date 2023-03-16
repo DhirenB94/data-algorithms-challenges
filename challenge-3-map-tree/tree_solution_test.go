@@ -144,7 +144,7 @@ func TestBinarySearchTree(t *testing.T) {
 				assert.Empty(t, getValue)
 				assert.False(t, isGot)
 			})
-			t.Run("when node to be removed is a leaf node", func(t *testing.T) {
+			t.Run("when node to be removed has one child node", func(t *testing.T) {
 				rootNode := &tree.TreeNode{
 					Key:   100,
 					Value: "100",
@@ -166,7 +166,7 @@ func TestBinarySearchTree(t *testing.T) {
 				assert.Nil(t, rootNode.LeftNode.LeftNode)
 
 			})
-			t.Run("when node to be removed is a leaf node", func(t *testing.T) {
+			t.Run("when node to be removed has left and right child nodes", func(t *testing.T) {
 
 			})
 		})
