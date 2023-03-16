@@ -112,7 +112,14 @@ func removeNode(node *TreeNode, key int) *TreeNode {
 			return nil
 		}
 		//if the node to be removed has a L/R subtree only
-
+		if node.LeftNode == nil {
+			node = node.RightNode
+			return node
+		}
+		if node.RightNode == nil {
+			node = node.LeftNode
+			return node
+		}
 		//if the node to be removed has BOTH subtrees
 
 	}
