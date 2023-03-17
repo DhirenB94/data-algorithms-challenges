@@ -97,13 +97,12 @@ func removeNode(node *TreeNode, key int) *TreeNode {
 	if node == nil {
 		return nil
 	}
-
 	//Finding the key
 	if key < node.Key {
 		node.LeftNode = removeNode(node.LeftNode, key)
 	}
 	if key > node.Key {
-		node.RightNode = removeNode(node.LeftNode, key)
+		node.RightNode = removeNode(node.RightNode, key)
 	}
 	if key == node.Key {
 		//if the node to be removed is a leaf node
@@ -114,14 +113,28 @@ func removeNode(node *TreeNode, key int) *TreeNode {
 		//if the node to be removed has a L/R subtree only
 		if node.LeftNode == nil {
 			node = node.RightNode
-			return node
 		}
 		if node.RightNode == nil {
 			node = node.LeftNode
-			return node
 		}
 		//if the node to be removed has BOTH subtrees
-
+		if node.LeftNode != nil && node.RightNode != nil {
+			//chose the R subtree and go as far left as possible to find the smallest node
+			smallestNode := smallestNode(node.RightNode)
+			//copy the smallest node found to the node to be removed
+			node.Key = smallestNode.Key
+			node.Value = smallestNode.Value
+			//the smallest node will always either be a leaf node or have a max of 1 child (in this case 1 right child only)
+			//call the remove method on it, but start from the right node of the original (as youve copied smallest node to the original, it would re-enter the loop)
+			removeNode(node.RightNode, smallestNode.Key)
+		}
 	}
-	return nil
+	return node
+}
+
+func smallestNode(node *TreeNode) *TreeNode {
+	for node.LeftNode != nil {
+		node = node.LeftNode
+	}
+	return node
 }

@@ -167,7 +167,28 @@ func TestBinarySearchTree(t *testing.T) {
 
 			})
 			t.Run("when node to be removed has left and right child nodes", func(t *testing.T) {
+				rootNode := &tree.TreeNode{
+					Key:   100,
+					Value: "100",
+				}
+				newBst := tree.NewBinarySearchTree(rootNode)
+				newBst.Set(75, "75")
+				newBst.Set(150, "150")
+				newBst.Set(60, "60")
+				newBst.Set(90, "90")
+				newBst.Set(85, "85")
+				newBst.Set(95, "95")
+				newBst.Set(92, "92")
 
+				removed, wasRemoved := newBst.Remove(90)
+				assert.Equal(t, "90", removed)
+				assert.True(t, wasRemoved)
+
+				getValue, isGot := newBst.Get(90)
+				assert.Empty(t, getValue)
+				assert.False(t, isGot)
+
+				assert.Equal(t, 92, rootNode.LeftNode.RightNode.Key)
 			})
 		})
 	})
