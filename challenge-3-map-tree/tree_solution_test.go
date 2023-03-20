@@ -189,6 +189,10 @@ func TestBinarySearchTree(t *testing.T) {
 				assert.False(t, isGot)
 
 				assert.Equal(t, 92, rootNode.LeftNode.RightNode.Key)
+
+				newBst.Remove(100)
+				assert.Equal(t, 150, rootNode.Key)
+				assert.Empty(t, rootNode.RightNode)
 			})
 		})
 	})

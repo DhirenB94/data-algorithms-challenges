@@ -126,7 +126,7 @@ func removeNode(node *TreeNode, key int) *TreeNode {
 			node.Value = smallestNode.Value
 			//the smallest node will always either be a leaf node or have a max of 1 child (in this case 1 right child only)
 			//call the remove method on it, but start from the right node of the original (as youve copied smallest node to the original, it would re-enter the loop)
-			removeNode(node.RightNode, smallestNode.Key)
+			node.RightNode = removeNode(node.RightNode, smallestNode.Key)
 		}
 	}
 	return node
