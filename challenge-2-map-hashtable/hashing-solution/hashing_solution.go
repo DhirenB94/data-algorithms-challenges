@@ -5,31 +5,31 @@ import (
 	"fmt"
 )
 
-type Node struct {
-	Key   int
-	Value string
-	Next  *Node
+type node struct {
+	key   int
+	value string
+	next  *node
 }
 
-type HashMap struct {
-	Buckets []*Node
+type hashMap struct {
+	buckets []*node
 }
 
 func NewHashMap() interfaces.Operations {
-	return &HashMap{Buckets: make([]*Node, 50)}
+	return &hashMap{buckets: make([]*node, 50)}
 }
 
 func hash(key int) int {
 	return key % 50
 }
 
-func (h *HashMap) Has(key int) bool {
+func (h *hashMap) Has(key int) bool {
 	indexPosition := hash(key)
-	if h.Buckets[indexPosition] != nil {
+	if h.buckets[indexPosition] != nil {
 		//iterate through all elements in the list at that index position
-		firstNodeInList := h.Buckets[indexPosition]
-		for n := firstNodeInList; n != nil; n = n.Next {
-			if n.Key == key {
+		firstNodeInList := h.buckets[indexPosition]
+		for n := firstNodeInList; n != nil; n = n.next {
+			if n.key == key {
 				return true
 			}
 		}
@@ -38,14 +38,14 @@ func (h *HashMap) Has(key int) bool {
 	return false
 }
 
-func (h *HashMap) Get(key int) (string, bool) {
+func (h *hashMap) Get(key int) (string, bool) {
 	indexPosition := hash(key)
-	if h.Buckets[indexPosition] != nil {
+	if h.buckets[indexPosition] != nil {
 		//check if it is in the linked list of the index position
-		firstNodeInList := h.Buckets[indexPosition]
-		for n := firstNodeInList; n != nil; n = n.Next {
-			if n.Key == key {
-				return n.Value, true
+		firstNodeInList := h.buckets[indexPosition]
+		for n := firstNodeInList; n != nil; n = n.next {
+			if n.key == key {
+				return n.value, true
 			}
 		}
 	}
@@ -53,47 +53,47 @@ func (h *HashMap) Get(key int) (string, bool) {
 	return "", false
 }
 
-func (h *HashMap) Set(key int, value string) (string, bool) {
+func (h *hashMap) Set(key int, value string) (string, bool) {
 	index := hash(key)
-	newNode := &Node{
-		Key:   key,
-		Value: value,
+	newNode := &node{
+		key:   key,
+		value: value,
 	}
 	//if index is empty, can insert the node
-	if h.Buckets[index] == nil {
-		h.Buckets[index] = newNode
+	if h.buckets[index] == nil {
+		h.buckets[index] = newNode
 		return "", true
 	}
 	//if some nodes already exists at that index position, loop through the linked-list
-	firstNodeInList := h.Buckets[index]
-	for n := firstNodeInList; n != nil; n = n.Next {
+	firstNodeInList := h.buckets[index]
+	for n := firstNodeInList; n != nil; n = n.next {
 		//if the key exists within the list, update its value
-		if n.Key == key {
-			oldValue := n.Value
-			n.Value = value
+		if n.key == key {
+			oldValue := n.value
+			n.value = value
 			return oldValue, true
 		}
 		// If it doesnt exist, add the new node to the end of the list
-		if n.Next == nil {
-			n.Next = newNode
+		if n.next == nil {
+			n.next = newNode
 			return "", true
 		}
 	}
 	return "", false
 }
 
-func (h *HashMap) Remove(key int) (string, bool) {
+func (h *hashMap) Remove(key int) (string, bool) {
 	indexPosition := hash(key)
 	oldValue, _ := h.Get(key)
 	//handle when you need to remove the 1st node in the list
-	if h.Buckets[indexPosition] != nil && h.Buckets[indexPosition].Key == key {
-		h.Buckets[indexPosition] = h.Buckets[indexPosition].Next
+	if h.buckets[indexPosition] != nil && h.buckets[indexPosition].key == key {
+		h.buckets[indexPosition] = h.buckets[indexPosition].next
 		return oldValue, true
 	}
 	//handle when you need to remove nth node in a list
-	for n := h.Buckets[indexPosition]; n != nil; n = n.Next {
-		if n.Next != nil && n.Next.Key == key {
-			n.Next = n.Next.Next
+	for n := h.buckets[indexPosition]; n != nil; n = n.next {
+		if n.next != nil && n.next.key == key {
+			n.next = n.next.next
 			return oldValue, true
 		}
 	}
