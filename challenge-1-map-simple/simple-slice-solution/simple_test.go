@@ -86,29 +86,35 @@ func TestSimplekeyValue(t *testing.T) {
 		})
 	})
 	t.Run("Set", func(t *testing.T) {
-		t.Run("adds the element if doesnt exist already", func(t *testing.T) {
+		t.Run("returns an empty string and true if element does not exist, and adds the element", func(t *testing.T) {
 			sliceKeyValues := simple.NewSliceKeyValues()
 
 			has := sliceKeyValues.Has(100)
 			assert.False(t, has)
 
 			timeNow := time.Now()
-			sliceKeyValues.Set(100, "zzz")
+			oldValue, isSet := sliceKeyValues.Set(100, "zzz")
 			fmt.Println(time.Since(timeNow))
+
+			assert.Empty(t, oldValue)
+			assert.True(t, isSet)
 
 			has = sliceKeyValues.Has(100)
 			assert.True(t, has)
 		})
 		t.Run("if element with key exists already, update its value", func(t *testing.T) {
 			sliceKeyValues := simple.NewSliceKeyValues()
+			initialValue := "abc"
+			expectedNewValue := "def"
 
 			sliceKeyValues.Set(100, "abc")
 
 			timeNow := time.Now()
-			sliceKeyValues.Set(100, "def")
+			oldValue, isSet := sliceKeyValues.Set(100, "def")
 			fmt.Println(time.Since(timeNow))
 
-			expectedNewValue := "def"
+			assert.Equal(t, oldValue, initialValue)
+			assert.True(t, isSet)
 
 			actualNewValue, _ := sliceKeyValues.Get(100)
 

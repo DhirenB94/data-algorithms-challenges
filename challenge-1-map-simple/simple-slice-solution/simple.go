@@ -1,15 +1,9 @@
 package simple
 
 import (
+	interfaces "data"
 	"fmt"
 )
-
-type Operations interface {
-	Has(key int) bool
-	Get(key int) (string, bool)
-	Remove(key int) (string, bool)
-	Set(key int, value string) string
-}
 
 type simpleKeyValue struct {
 	key   int
@@ -20,7 +14,7 @@ type sliceKeyValues struct {
 	keyValues []simpleKeyValue
 }
 
-func NewSliceKeyValues() Operations {
+func NewSliceKeyValues() interfaces.Operations {
 	return &sliceKeyValues{}
 }
 
@@ -55,18 +49,18 @@ func (s *sliceKeyValues) Remove(key int) (string, bool) {
 	return value, isPresent
 }
 
-func (s *sliceKeyValues) Set(key int, value string) string {
+func (s *sliceKeyValues) Set(key int, value string) (string, bool) {
 	keyIndex := s.indexOf(key)
 	if keyIndex == -1 {
 		s.keyValues = append(s.keyValues, simpleKeyValue{
 			key:   key,
 			value: value,
 		})
-		return ""
+		return "", true
 	}
 	oldValue, _ := s.Get(key)
 	s.keyValues[keyIndex].value = value
-	return oldValue
+	return oldValue, true
 }
 
 func (s *sliceKeyValues) indexOf(key int) int {
