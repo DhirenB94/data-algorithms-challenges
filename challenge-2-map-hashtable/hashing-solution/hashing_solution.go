@@ -1,6 +1,7 @@
 package hashing_solution
 
 import (
+	interfaces "data"
 	"fmt"
 )
 
@@ -12,6 +13,10 @@ type Node struct {
 
 type HashMap struct {
 	Buckets []*Node
+}
+
+func NewHashMap() interfaces.Operations {
+	return &HashMap{Buckets: make([]*Node, 50)}
 }
 
 func hash(key int) int {
