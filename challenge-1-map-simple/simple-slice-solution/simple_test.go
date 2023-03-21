@@ -10,138 +10,109 @@ import (
 
 func TestSimplekeyValue(t *testing.T) {
 	t.Run("Has", func(t *testing.T) {
-		t.Run("return true if key is present", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(50)
+		t.Run("returns true if element is present", func(t *testing.T) {
+			sliceKeyValues := simple.NewSliceKeyValues()
 
-			timeNow := time.Now()
-			answer := sliceKeyValues.Has(45)
-			fmt.Println(time.Since(timeNow))
+			sliceKeyValues.Set(5, "foo")
+			sliceKeyValues.Set(10, "bar")
 
-			assert.Equal(t, true, answer)
+			has := sliceKeyValues.Has(10)
+			assert.True(t, has)
 		})
-		t.Run("return false if key is not present", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(10)
+		t.Run("returns false if element is not present", func(t *testing.T) {
+			sliceKeyValues := simple.NewSliceKeyValues()
 
-			answer := sliceKeyValues.Has(100)
-			assert.Equal(t, false, answer)
+			sliceKeyValues.Set(5, "foo")
+			sliceKeyValues.Set(10, "bar")
+
+			has := sliceKeyValues.Has(100)
+			assert.False(t, has)
 		})
 	})
 	t.Run("Get", func(t *testing.T) {
 		t.Run("gets the value if key present", func(t *testing.T) {
-			expectedValue := "t"
-			sliceKeyValues := sliceKeyValuesWithLength(50)
+			sliceKeyValues := simple.NewSliceKeyValues()
+			expectedValue := "bar"
+
+			sliceKeyValues.Set(45, "foo")
+			sliceKeyValues.Set(50, "bar")
 
 			timeNow := time.Now()
-			value, isPresent := sliceKeyValues.Get(45)
+			value, isPresent := sliceKeyValues.Get(50)
 			fmt.Println(time.Since(timeNow))
 
 			assert.True(t, isPresent)
-
 			assert.Equal(t, expectedValue, value)
-
 		})
 		t.Run("returns empty string if key not present", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(10)
+			sliceKeyValues := simple.NewSliceKeyValues()
+
+			sliceKeyValues.Set(45, "foo")
+			sliceKeyValues.Set(50, "bar")
 
 			value, isPresent := sliceKeyValues.Get(100)
 			assert.False(t, isPresent)
-
 			assert.Empty(t, value)
 		})
 	})
 	t.Run("Remove", func(t *testing.T) {
 		t.Run("removes the element with given key", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(50)
+			sliceKeyValues := simple.NewSliceKeyValues()
+			expectedRemovedValue := "foo"
+
+			sliceKeyValues.Set(45, "foo")
+			sliceKeyValues.Set(50, "bar")
 
 			timeNow := time.Now()
-			removedElement, isPresent := sliceKeyValues.Remove(45)
+			removedValue, isPresent := sliceKeyValues.Remove(45)
 			fmt.Println(time.Since(timeNow))
 
 			assert.True(t, isPresent)
-			assert.Equal(t, "t", removedElement)
+			assert.Equal(t, expectedRemovedValue, removedValue)
 
-			assert.Len(t, sliceKeyValues.KeyValues, 49)
+			has := sliceKeyValues.Has(45)
+			assert.False(t, has)
 		})
 		t.Run("if element is not present, returns nil", func(t *testing.T) {
-			sliceKeyValues := sliceKeyValuesWithLength(10)
+			sliceKeyValues := simple.NewSliceKeyValues()
 
-			removedElement, isPresent := sliceKeyValues.Remove(30)
+			sliceKeyValues.Set(45, "foo")
+			sliceKeyValues.Set(50, "bar")
+
+			removedElement, isPresent := sliceKeyValues.Remove(100)
+
 			assert.False(t, isPresent)
-
 			assert.Empty(t, removedElement)
-			assert.Len(t, sliceKeyValues.KeyValues, 10)
 		})
 	})
 	t.Run("Set", func(t *testing.T) {
 		t.Run("adds the element if doesnt exist already", func(t *testing.T) {
-			expectedAddedElement := simple.SimpleKeyValue{
-				Key:   100,
-				Value: "zzz",
-			}
-			sliceKeyValues := sliceKeyValuesWithLength(50)
+			sliceKeyValues := simple.NewSliceKeyValues()
+
+			has := sliceKeyValues.Has(100)
+			assert.False(t, has)
 
 			timeNow := time.Now()
 			sliceKeyValues.Set(100, "zzz")
 			fmt.Println(time.Since(timeNow))
 
-			assert.Len(t, sliceKeyValues.KeyValues, 51)
-			lastElement := len(sliceKeyValues.KeyValues) - 1
-			assert.Equal(t, expectedAddedElement, sliceKeyValues.KeyValues[lastElement])
+			has = sliceKeyValues.Has(100)
+			assert.True(t, has)
 		})
 		t.Run("if element with key exists already, update its value", func(t *testing.T) {
-			originalElement := simple.SimpleKeyValue{
-				Key:   3,
-				Value: "d",
-			}
-			expectedUpdatedElement := simple.SimpleKeyValue{
-				Key:   3,
-				Value: "zzz",
-			}
-			sliceKeyValues := sliceKeyValuesWithLength(15)
-			assert.Equal(t, originalElement, sliceKeyValues.KeyValues[3])
+			sliceKeyValues := simple.NewSliceKeyValues()
+
+			sliceKeyValues.Set(100, "abc")
 
 			timeNow := time.Now()
-			sliceKeyValues.Set(3, "zzz")
+			sliceKeyValues.Set(100, "def")
 			fmt.Println(time.Since(timeNow))
 
-			assert.Len(t, sliceKeyValues.KeyValues, 15)
-			assert.Equal(t, expectedUpdatedElement, sliceKeyValues.KeyValues[3])
+			expectedNewValue := "def"
+
+			actualNewValue, _ := sliceKeyValues.Get(100)
+
+			assert.Equal(t, expectedNewValue, actualNewValue)
 		})
 	})
-}
-
-func sliceKeyValuesWithLength(size int) *simple.SliceKeyValues {
-	newSliceKeyValues := &simple.SliceKeyValues{}
-	newSliceKeyValues.KeyValues = newSlice(size)
-
-	return newSliceKeyValues
-}
-
-func newSlice(size int) []simple.SimpleKeyValue {
-	var finalSlice []simple.SimpleKeyValue
-	sliceSize := make([]simple.SimpleKeyValue, size)
-	initialKey := 0
-	initialValue := "z"
-
-	for _, s := range sliceSize {
-		s.Key = initialKey
-		initialKey++
-		s.Value = getNextString(initialValue)
-		initialValue = s.Value
-
-		finalSlice = append(finalSlice, s)
-	}
-	return finalSlice
-}
-
-func getNextString(str string) string {
-	result := ""
-	for _, letter := range str {
-		if letter == 'z' {
-			result += "a"
-		} else {
-			result += string(letter + 1)
-		}
-	}
-	return result
 }

@@ -4,6 +4,13 @@ import (
 	"fmt"
 )
 
+type Operations interface {
+	Has(key int) bool
+	Get(key int) (string, bool)
+	Remove(key int) (string, bool)
+	Set(key int, value string) string
+}
+
 type SimpleKeyValue struct {
 	Key   int
 	Value string
@@ -11,6 +18,10 @@ type SimpleKeyValue struct {
 
 type SliceKeyValues struct {
 	KeyValues []SimpleKeyValue
+}
+
+func NewSliceKeyValues() Operations {
+	return &SliceKeyValues{make([]SimpleKeyValue, 0)}
 }
 
 func (s *SliceKeyValues) Has(key int) bool {
