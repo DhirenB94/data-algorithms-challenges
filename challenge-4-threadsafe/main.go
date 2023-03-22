@@ -2,8 +2,6 @@ package main
 
 import (
 	interfaces "data"
-	"data/challenge-1-map-simple/simple-slice-solution"
-	hashing_solution "data/challenge-2-map-hashtable/hashing-solution"
 	tree "data/challenge-3-map-tree"
 	"fmt"
 	"strconv"
@@ -11,45 +9,47 @@ import (
 )
 
 func main() {
-	simpleKeyValues := simple.NewSliceKeyValues()
-	hashMap := hashing_solution.NewHashMap()
+	//simpleKeyValues := simple.NewSliceKeyValues()
+	//ThreadSafetyChecker(simpleKeyValues)
+
+	//hashMap := hashing_solution.NewHashMap()
+	//ThreadSafetyChecker(hashMap)
+	//
 	binarySearchTree := tree.NewBinarySearchTree()
-
-	ThreadSafetyChecker(simpleKeyValues)
-
-	ThreadSafetyChecker(hashMap)
-
 	ThreadSafetyChecker(binarySearchTree)
 
 }
 
-func ThreadSafetyChecker(customMap interfaces.Operations) interfaces.Operations {
-	fmt.Println(customMap)
+func ThreadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
+	fmt.Println(anyMap)
 
-	// Create three goroutines that concurrently access the customMap instance
 	var wg sync.WaitGroup
-	wg.Add(3)
+	//wg.Add(3)
 
+	// Create three goroutines that concurrently access the anyMap instance
 	go func() {
-		defer wg.Done()
+		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
+			wg.Add(1)
 			value := strconv.Itoa(i)
-			customMap.Set(i, value)
+			anyMap.Set(i, value)
 		}
 	}()
 
 	go func() {
-		defer wg.Done()
+		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
-			removedValues, _ := customMap.Remove(i)
+			wg.Add(1)
+			removedValues, _ := anyMap.Remove(i)
 			fmt.Printf("Goroutine 2 REMOVE: removedValue = %v, key = %v\n", removedValues, i)
 		}
 	}()
 
 	go func() {
-		defer wg.Done()
+		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
-			value, _ := customMap.Get(i)
+			wg.Add(1)
+			value, _ := anyMap.Get(i)
 			fmt.Printf("Goroutine 2 GET: gotValue = %v, key = %v\n", value, i)
 		}
 	}()
@@ -57,6 +57,6 @@ func ThreadSafetyChecker(customMap interfaces.Operations) interfaces.Operations 
 	// Wait for the 3 goroutines to complete
 	wg.Wait()
 
-	fmt.Println(customMap)
-	return customMap
+	fmt.Println(anyMap)
+	return anyMap
 }
