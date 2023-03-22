@@ -67,6 +67,7 @@ func threadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
 
 	// Create three goroutines that concurrently access the anyMap instance
 	go func() {
+		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
 			wg.Add(1)
 			value := strconv.Itoa(i)
@@ -77,6 +78,7 @@ func threadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
 	}()
 
 	go func() {
+		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
 			wg.Add(1)
 			removedValues, _ := anyMap.Remove(i)
@@ -86,6 +88,7 @@ func threadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
 	}()
 
 	go func() {
+		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
 			wg.Add(1)
 			value, _ := anyMap.Get(i)
