@@ -39,7 +39,7 @@ func TestThreadSafety(t *testing.T) {
 
 		})
 		t.Run("BinarySearchTree", func(t *testing.T) {
-
+			//sometimes panics, sometimes test passes
 			binarySearchTree := tree.NewBinarySearchTree()
 
 			gotTree := threadSafetyChecker(binarySearchTree)
@@ -54,13 +54,47 @@ func TestThreadSafety(t *testing.T) {
 	})
 	t.Run("Thread safe options", func(t *testing.T) {
 		t.Run("Wrapped SimpleKeyValue", func(t *testing.T) {
+			//only works soemetimes
+			simpleKeyValues := simple.NewSliceKeyValues()
+
+			threadSafeWrapper := NewThreadSafeMap(simpleKeyValues)
+			got := threadSafetyChecker(threadSafeWrapper)
+
+			for i := 0; i < 1000; i++ {
+				//comment print statement out for weird stuff
+				fmt.Println("Getting...")
+				getValue, _ := got.Get(i)
+				assert.Empty(t, getValue)
+			}
 
 		})
 		t.Run("Wrapped HashMap", func(t *testing.T) {
+			//only works sometimes
+			hashMap := hashing_solution.NewHashMap()
 
+			threadSafeWrapper := NewThreadSafeMap(hashMap)
+			got := threadSafetyChecker(threadSafeWrapper)
+
+			for i := 0; i < 1000; i++ {
+				//comment print statement out for weird stuff
+				fmt.Println("Getting...")
+				getValue, _ := got.Get(i)
+				assert.Empty(t, getValue)
+			}
 		})
 		t.Run("Wrapped BinarySearchTree", func(t *testing.T) {
+			//PANICS but works in the main
+			bst := tree.NewBinarySearchTree()
 
+			threadSafeWrapper := NewThreadSafeMap(bst)
+			got := threadSafetyChecker(threadSafeWrapper)
+
+			for i := 0; i < 1000; i++ {
+				//comment print statement out for weird stuff
+				fmt.Println("Getting...")
+				getValue, _ := got.Get(i)
+				assert.Empty(t, getValue)
+			}
 		})
 	})
 }

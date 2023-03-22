@@ -10,15 +10,52 @@ import (
 	"sync"
 )
 
+type threadSafeMap struct {
+	mutex     sync.Mutex
+	customMap interfaces.Operations
+}
+
+func NewThreadSafeMap(customMap interfaces.Operations) interfaces.Operations {
+	return &threadSafeMap{customMap: customMap}
+}
+
+func (tsm *threadSafeMap) Has(key int) bool {
+	tsm.mutex.Lock()
+	defer tsm.mutex.Unlock()
+	return tsm.customMap.Has(key)
+}
+
+func (tsm *threadSafeMap) Get(key int) (string, bool) {
+	tsm.mutex.Lock()
+	defer tsm.mutex.Unlock()
+	return tsm.customMap.Get(key)
+}
+func (tsm *threadSafeMap) Remove(key int) (string, bool) {
+	tsm.mutex.Lock()
+	defer tsm.mutex.Unlock()
+	return tsm.customMap.Remove(key)
+}
+func (tsm *threadSafeMap) Set(key int, value string) (string, bool) {
+	tsm.mutex.Lock()
+	defer tsm.mutex.Unlock()
+	return tsm.customMap.Set(key, value)
+}
+
 func main() {
 	simpleKeyValues := simple.NewSliceKeyValues()
-	threadSafetyChecker(simpleKeyValues)
+	//threadSafetyChecker(simpleKeyValues)
+	simpleKeyValuesWrapper := NewThreadSafeMap(simpleKeyValues)
+	threadSafetyChecker(simpleKeyValuesWrapper)
 
 	hashMap := hashing_solution.NewHashMap()
-	threadSafetyChecker(hashMap)
+	//threadSafetyChecker(hashMap)
+	hashMapWrapper := NewThreadSafeMap(hashMap)
+	threadSafetyChecker(hashMapWrapper)
 
 	binarySearchTree := tree.NewBinarySearchTree()
-	threadSafetyChecker(binarySearchTree)
+	//threadSafetyChecker(binarySearchTree)
+	binarySearchTreeWrapper := NewThreadSafeMap(binarySearchTree)
+	threadSafetyChecker(binarySearchTreeWrapper)
 
 }
 
