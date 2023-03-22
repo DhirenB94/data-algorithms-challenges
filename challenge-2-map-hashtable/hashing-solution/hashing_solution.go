@@ -2,7 +2,6 @@ package hashing_solution
 
 import (
 	interfaces "data"
-	"fmt"
 )
 
 type node struct {
@@ -34,7 +33,6 @@ func (h *hashMap) Has(key int) bool {
 			}
 		}
 	}
-	fmt.Printf("element with key: %v not present\n", key)
 	return false
 }
 
@@ -49,7 +47,6 @@ func (h *hashMap) Get(key int) (string, bool) {
 			}
 		}
 	}
-	fmt.Printf("element with key: %v not present\n", key)
 	return "", false
 }
 

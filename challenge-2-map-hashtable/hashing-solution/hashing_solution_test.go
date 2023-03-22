@@ -123,10 +123,10 @@ func TestHashKeys(t *testing.T) {
 			hashMap.Set(195, "foo4")
 
 			timeNow := time.Now()
-			removedvalue, isRemoved := hashMap.Remove(95)
+			removedValue, isRemoved := hashMap.Remove(95)
 			fmt.Println(time.Since(timeNow))
 
-			assert.Equal(t, "foo2", removedvalue)
+			assert.Equal(t, "foo2", removedValue)
 			assert.True(t, isRemoved)
 
 			getValue, isGot := hashMap.Get(55)

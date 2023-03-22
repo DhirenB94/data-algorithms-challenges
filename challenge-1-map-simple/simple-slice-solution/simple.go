@@ -2,7 +2,6 @@ package simple
 
 import (
 	interfaces "data"
-	"fmt"
 )
 
 type simpleKeyValue struct {
@@ -20,7 +19,6 @@ func NewSliceKeyValues() interfaces.Operations {
 
 func (s *sliceKeyValues) Has(key int) bool {
 	if s.indexOf(key) == -1 {
-		fmt.Printf("element with key: %v not present\n", key)
 		return false
 	}
 	return true
@@ -32,20 +30,17 @@ func (s *sliceKeyValues) Get(key int) (string, bool) {
 			return k.value, true
 		}
 	}
-	fmt.Printf("element with key: %v not present\n", key)
 	return "", false
 }
 
 func (s *sliceKeyValues) Remove(key int) (string, bool) {
 	keyIndex := s.indexOf(key)
 	if keyIndex == -1 {
-		fmt.Printf("Key: %v, not found\n", key)
 		return "", false
 	}
 	value, isPresent := s.Get(key)
 	s.keyValues = append(s.keyValues[:keyIndex], s.keyValues[keyIndex+1:]...)
 
-	fmt.Printf("removed element with key: %v and value: :%v\n", key, value)
 	return value, isPresent
 }
 
