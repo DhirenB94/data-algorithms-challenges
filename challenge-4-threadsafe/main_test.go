@@ -69,7 +69,7 @@ func TestThreadSafety(t *testing.T) {
 
 		})
 		t.Run("Wrapped HashMap", func(t *testing.T) {
-			//only works sometimes
+			//only works rarely
 			hashMap := hashing_solution.NewHashMap()
 
 			threadSafeWrapper := NewThreadSafeMap(hashMap)

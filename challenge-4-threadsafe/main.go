@@ -67,30 +67,30 @@ func threadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
 
 	// Create three goroutines that concurrently access the anyMap instance
 	go func() {
-		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
 			wg.Add(1)
 			value := strconv.Itoa(i)
 			anyMap.Set(i, value)
 			fmt.Printf("Goroutine 1 SET: setting key = %v\n", i)
+			wg.Done()
 		}
 	}()
 
 	go func() {
-		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
 			wg.Add(1)
 			removedValues, _ := anyMap.Remove(i)
 			fmt.Printf("Goroutine 2 REMOVE: removedValue = %v, key = %v\n", removedValues, i)
+			wg.Done()
 		}
 	}()
 
 	go func() {
-		//defer wg.Done()
 		for i := 0; i < 1000; i++ {
 			wg.Add(1)
 			value, _ := anyMap.Get(i)
 			fmt.Printf("Goroutine 3 GET: gotValue = %v, key = %v\n", value, i)
+			wg.Done()
 		}
 	}()
 
