@@ -15,7 +15,7 @@ func TestThreadSafety(t *testing.T) {
 			//sometimes only is not threadsafe
 			simpleKeyValues := simple.NewSliceKeyValues()
 
-			got := ThreadSafetyChecker(simpleKeyValues)
+			got := threadSafetyChecker(simpleKeyValues)
 
 			for i := 0; i < 1000; i++ {
 				//comment print statement out for weird stuff
@@ -28,7 +28,7 @@ func TestThreadSafety(t *testing.T) {
 			//only works sometimes
 			hashMap := hashing_solution.NewHashMap()
 
-			gotHashMap := ThreadSafetyChecker(hashMap)
+			gotHashMap := threadSafetyChecker(hashMap)
 
 			for i := 0; i < 1000; i++ {
 				//comment print statement out for weird stuff
@@ -42,7 +42,7 @@ func TestThreadSafety(t *testing.T) {
 
 			binarySearchTree := tree.NewBinarySearchTree()
 
-			gotTree := ThreadSafetyChecker(binarySearchTree)
+			gotTree := threadSafetyChecker(binarySearchTree)
 
 			for i := 0; i < 1000; i++ {
 				//comment print statement out for weird stuff
@@ -52,5 +52,15 @@ func TestThreadSafety(t *testing.T) {
 			}
 		})
 	})
+	t.Run("Thread safe options", func(t *testing.T) {
+		t.Run("Wrapped SimpleKeyValue", func(t *testing.T) {
 
+		})
+		t.Run("Wrapped HashMap", func(t *testing.T) {
+
+		})
+		t.Run("Wrapped BinarySearchTree", func(t *testing.T) {
+
+		})
+	})
 }

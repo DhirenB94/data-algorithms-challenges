@@ -2,6 +2,8 @@ package main
 
 import (
 	interfaces "data"
+	"data/challenge-1-map-simple/simple-slice-solution"
+	hashing_solution "data/challenge-2-map-hashtable/hashing-solution"
 	tree "data/challenge-3-map-tree"
 	"fmt"
 	"strconv"
@@ -9,18 +11,18 @@ import (
 )
 
 func main() {
-	//simpleKeyValues := simple.NewSliceKeyValues()
-	//ThreadSafetyChecker(simpleKeyValues)
+	simpleKeyValues := simple.NewSliceKeyValues()
+	threadSafetyChecker(simpleKeyValues)
 
-	//hashMap := hashing_solution.NewHashMap()
-	//ThreadSafetyChecker(hashMap)
-	//
+	hashMap := hashing_solution.NewHashMap()
+	threadSafetyChecker(hashMap)
+
 	binarySearchTree := tree.NewBinarySearchTree()
-	ThreadSafetyChecker(binarySearchTree)
+	threadSafetyChecker(binarySearchTree)
 
 }
 
-func ThreadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
+func threadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
 	fmt.Println(anyMap)
 
 	var wg sync.WaitGroup
@@ -33,6 +35,7 @@ func ThreadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
 			wg.Add(1)
 			value := strconv.Itoa(i)
 			anyMap.Set(i, value)
+			fmt.Printf("Goroutine 1 SET: setting key = %v\n", i)
 		}
 	}()
 
@@ -50,7 +53,7 @@ func ThreadSafetyChecker(anyMap interfaces.Operations) interfaces.Operations {
 		for i := 0; i < 1000; i++ {
 			wg.Add(1)
 			value, _ := anyMap.Get(i)
-			fmt.Printf("Goroutine 2 GET: gotValue = %v, key = %v\n", value, i)
+			fmt.Printf("Goroutine 3 GET: gotValue = %v, key = %v\n", value, i)
 		}
 	}()
 
