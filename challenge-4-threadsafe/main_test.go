@@ -10,14 +10,19 @@ import (
 )
 
 func TestThreadSafety(t *testing.T) {
-	t.Run("Non thread safe options do not return an empty map", func(t *testing.T) {
+	t.Run("Non thread safe options", func(t *testing.T) {
 		t.Run("SimpleKeyValue", func(t *testing.T) {
+			//sometimes only is not threadsafe
 			simpleKeyValues := simple.NewSliceKeyValues()
-			assert.Empty(t, simpleKeyValues)
 
 			got := ThreadSafetyChecker(simpleKeyValues)
 
-			assert.NotEmpty(t, got)
+			for i := 0; i < 1000; i++ {
+				//comment print statement out for weird stuff
+				fmt.Println("Getting...")
+				getValue, _ := got.Get(i)
+				assert.Empty(t, getValue)
+			}
 		})
 		t.Run("HashMap", func(t *testing.T) {
 			//only works sometimes
