@@ -2,6 +2,7 @@ package hashing_solution
 
 import (
 	interfaces "data"
+	"fmt"
 )
 
 type node struct {
@@ -95,4 +96,8 @@ func (h *hashMap) Remove(key int) (string, bool) {
 		}
 	}
 	return "", false
+}
+
+func (h *hashMap) String() string {
+	return fmt.Sprint("Bucket", h.buckets)
 }

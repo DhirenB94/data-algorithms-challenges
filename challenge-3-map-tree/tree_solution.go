@@ -1,6 +1,9 @@
 package tree
 
-import interfaces "data"
+import (
+	interfaces "data"
+	"fmt"
+)
 
 type treeNode struct {
 	key       int
@@ -45,6 +48,10 @@ func (bst *binarySearchTree) Remove(key int) (string, bool) {
 	}
 	removeNode(bst.root, key)
 	return getValue, true
+}
+
+func (bst *binarySearchTree) String() string {
+	return fmt.Sprint("Root", bst.root)
 }
 
 func searchNode(treeNode *treeNode, key int) (string, bool) {

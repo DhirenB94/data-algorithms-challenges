@@ -2,6 +2,7 @@ package simple
 
 import (
 	interfaces "data"
+	"fmt"
 )
 
 type simpleKeyValue struct {
@@ -65,4 +66,8 @@ func (s *sliceKeyValues) indexOf(key int) int {
 		}
 	}
 	return -1
+}
+
+func (s *sliceKeyValues) String() string {
+	return fmt.Sprint("KeyValues", s.keyValues)
 }
