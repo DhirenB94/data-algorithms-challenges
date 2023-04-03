@@ -1,9 +1,9 @@
 package interfaces
 
 type Operations interface {
-	Has(key int) bool
-	Get(key int) (string, bool)
-	Remove(key int) (string, bool)
-	Set(key int, value string) (string, bool)
+	Has(key interface{}) bool
+	Get(key interface{}) (interface{}, bool)
+	Remove(key interface{}) (interface{}, bool)
+	Set(key interface{}, value interface{}) (interface{}, bool)
 	String() string
 }

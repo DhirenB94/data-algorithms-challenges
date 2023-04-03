@@ -6,8 +6,8 @@ import (
 )
 
 type simpleKeyValue struct {
-	key   int
-	value string
+	key   interface{}
+	value interface{}
 }
 
 type sliceKeyValues struct {
@@ -18,26 +18,26 @@ func NewSliceKeyValues() interfaces.Operations {
 	return &sliceKeyValues{}
 }
 
-func (s *sliceKeyValues) Has(key int) bool {
+func (s *sliceKeyValues) Has(key interface{}) bool {
 	if s.indexOf(key) == -1 {
 		return false
 	}
 	return true
 }
 
-func (s *sliceKeyValues) Get(key int) (string, bool) {
+func (s *sliceKeyValues) Get(key interface{}) (interface{}, bool) {
 	for _, k := range s.keyValues {
 		if k.key == key {
 			return k.value, true
 		}
 	}
-	return "", false
+	return nil, false
 }
 
-func (s *sliceKeyValues) Remove(key int) (string, bool) {
+func (s *sliceKeyValues) Remove(key interface{}) (interface{}, bool) {
 	keyIndex := s.indexOf(key)
 	if keyIndex == -1 {
-		return "", false
+		return nil, false
 	}
 	value, isPresent := s.Get(key)
 	s.keyValues = append(s.keyValues[:keyIndex], s.keyValues[keyIndex+1:]...)
@@ -45,21 +45,21 @@ func (s *sliceKeyValues) Remove(key int) (string, bool) {
 	return value, isPresent
 }
 
-func (s *sliceKeyValues) Set(key int, value string) (string, bool) {
+func (s *sliceKeyValues) Set(key interface{}, value interface{}) (interface{}, bool) {
 	keyIndex := s.indexOf(key)
 	if keyIndex == -1 {
 		s.keyValues = append(s.keyValues, simpleKeyValue{
 			key:   key,
 			value: value,
 		})
-		return "", true
+		return nil, true
 	}
 	oldValue, _ := s.Get(key)
 	s.keyValues[keyIndex].value = value
 	return oldValue, true
 }
 
-func (s *sliceKeyValues) indexOf(key int) int {
+func (s *sliceKeyValues) indexOf(key interface{}) int {
 	for i, k := range s.keyValues {
 		if k.key == key {
 			return i
