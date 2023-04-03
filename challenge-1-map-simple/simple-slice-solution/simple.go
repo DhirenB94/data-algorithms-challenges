@@ -5,61 +5,61 @@ import (
 	"fmt"
 )
 
-type simpleKeyValue struct {
-	key   interface{}
-	value interface{}
+type simpleKeyValue[K comparable, V any] struct {
+	key   K
+	value V
 }
 
-type sliceKeyValues struct {
-	keyValues []simpleKeyValue
+type sliceKeyValues[K comparable, V any] struct {
+	keyValues []simpleKeyValue[K, V]
 }
 
-func NewSliceKeyValues() interfaces.Operations {
-	return &sliceKeyValues{}
+func NewSliceKeyValues[K comparable, V any]() interfaces.Operations[K, V] {
+	return &sliceKeyValues[K, V]{}
 }
 
-func (s *sliceKeyValues) Has(key interface{}) bool {
+func (s *sliceKeyValues[K, V]) Has(key K) bool {
 	if s.indexOf(key) == -1 {
 		return false
 	}
 	return true
 }
 
-func (s *sliceKeyValues) Get(key interface{}) (interface{}, bool) {
+func (s *sliceKeyValues[K, V]) Get(key K) *V {
 	for _, k := range s.keyValues {
 		if k.key == key {
-			return k.value, true
+			return &k.value
 		}
 	}
-	return nil, false
+	return nil
 }
 
-func (s *sliceKeyValues) Remove(key interface{}) (interface{}, bool) {
+func (s *sliceKeyValues[K, V]) Remove(key K) *V {
 	keyIndex := s.indexOf(key)
 	if keyIndex == -1 {
-		return nil, false
+		return nil
 	}
-	value, isPresent := s.Get(key)
+	value := s.Get(key)
 	s.keyValues = append(s.keyValues[:keyIndex], s.keyValues[keyIndex+1:]...)
 
-	return value, isPresent
+	return value
 }
 
-func (s *sliceKeyValues) Set(key interface{}, value interface{}) (interface{}, bool) {
+func (s *sliceKeyValues[K, V]) Set(key K, value V) *V {
 	keyIndex := s.indexOf(key)
 	if keyIndex == -1 {
-		s.keyValues = append(s.keyValues, simpleKeyValue{
+		s.keyValues = append(s.keyValues, simpleKeyValue[K, V]{
 			key:   key,
 			value: value,
 		})
-		return nil, true
+		return nil
 	}
-	oldValue, _ := s.Get(key)
+	oldValue := s.Get(key)
 	s.keyValues[keyIndex].value = value
-	return oldValue, true
+	return oldValue
 }
 
-func (s *sliceKeyValues) indexOf(key interface{}) int {
+func (s *sliceKeyValues[K, V]) indexOf(key K) int {
 	for i, k := range s.keyValues {
 		if k.key == key {
 			return i
@@ -68,6 +68,6 @@ func (s *sliceKeyValues) indexOf(key interface{}) int {
 	return -1
 }
 
-func (s *sliceKeyValues) String() string {
+func (s *sliceKeyValues[K, V]) String() string {
 	return fmt.Sprint("KeyValues", s.keyValues)
 }

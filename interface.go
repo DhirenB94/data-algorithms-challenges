@@ -1,9 +1,9 @@
 package interfaces
 
-type Operations interface {
-	Has(key interface{}) bool
-	Get(key interface{}) (interface{}, bool)
-	Remove(key interface{}) (interface{}, bool)
-	Set(key interface{}, value interface{}) (interface{}, bool)
+type Operations[K comparable, V any] interface {
+	Has(key K) bool
+	Get(key K) *V
+	Remove(key K) *V
+	Set(key K, value V) *V
 	String() string
 }
