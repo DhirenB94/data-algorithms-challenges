@@ -11,7 +11,7 @@ import (
 func TestHashKeys(t *testing.T) {
 	t.Run("Has", func(t *testing.T) {
 		t.Run("return true if key is present", func(t *testing.T) {
-			hashTable := hashing_solution.NewHashMap()
+			hashTable := hashing_solution.NewHashMap[string]()
 			hashTable.Set(45, "foo")
 			hashTable.Set(95, "bar")
 
@@ -25,97 +25,87 @@ func TestHashKeys(t *testing.T) {
 			assert.True(t, has)
 		})
 		t.Run("return false if key is not present", func(t *testing.T) {
-			hashTable := hashing_solution.NewHashMap()
+			hashTable := hashing_solution.NewHashMap[string]()
 
 			has := hashTable.Has(10)
 			assert.False(t, has)
 		})
 	})
 	t.Run("Get", func(t *testing.T) {
-		t.Run("returns the value and true if key present", func(t *testing.T) {
-			hashTable := hashing_solution.NewHashMap()
+		t.Run("returns the value if key present", func(t *testing.T) {
+			hashTable := hashing_solution.NewHashMap[string]()
 			expectedGetValue := "foo"
 			expectedGetValue2 := "bar"
 			hashTable.Set(45, "foo")
 			hashTable.Set(95, "bar")
 
 			timeNow := time.Now()
-			getValue, isGot := hashTable.Get(45)
+			getValue := hashTable.Get(45)
 			fmt.Println(time.Since(timeNow))
 
-			assert.Equal(t, expectedGetValue, getValue)
-			assert.True(t, isGot)
+			assert.Equal(t, &expectedGetValue, getValue)
 
-			getValue, isGot = hashTable.Get(95)
-			assert.Equal(t, expectedGetValue2, getValue)
-			assert.True(t, isGot)
+			getValue = hashTable.Get(95)
+			assert.Equal(t, &expectedGetValue2, getValue)
 		})
-		t.Run("returns empty string and false if key not present", func(t *testing.T) {
-			hashTable := hashing_solution.NewHashMap()
+		t.Run("returns nil if key not present", func(t *testing.T) {
+			hashTable := hashing_solution.NewHashMap[string]()
 
-			getValue, isGot := hashTable.Get(45)
-			assert.Equal(t, "", getValue)
-			assert.False(t, isGot)
+			getValue := hashTable.Get(45)
+			assert.Nil(t, getValue, getValue)
 		})
 	})
 	t.Run("Set", func(t *testing.T) {
-		t.Run("returns empty string and true if element does not exist already", func(t *testing.T) {
-			hashTable := hashing_solution.NewHashMap()
+		t.Run("set the element and return nil if element does not exist already", func(t *testing.T) {
+			hashTable := hashing_solution.NewHashMap[string]()
 
 			timeNow := time.Now()
-			oldValue, isSet := hashTable.Set(45, "foo")
+			oldValue := hashTable.Set(45, "foo")
 			fmt.Println(time.Since(timeNow))
 
-			assert.Empty(t, oldValue)
-			assert.True(t, isSet)
+			assert.Nil(t, oldValue)
 
-			getValue, isGot := hashTable.Get(45)
-			assert.Equal(t, "foo", getValue)
-			assert.True(t, isGot)
+			getValue := hashTable.Get(45)
+			assert.Equal(t, "foo", *getValue)
 
-			oldValue, isSet = hashTable.Set(95, "bar")
-			assert.Empty(t, oldValue)
-			assert.True(t, isSet)
+			oldValue = hashTable.Set(95, "bar")
+			assert.Nil(t, oldValue)
 
-			getValue, isGot = hashTable.Get(95)
-			assert.Equal(t, "bar", getValue)
-			assert.True(t, isGot)
+			getValue = hashTable.Get(95)
+			assert.Equal(t, "bar", *getValue)
 		})
-		t.Run("if element with key exists already, update its value, return the old value and true", func(t *testing.T) {
-			hashTable := hashing_solution.NewHashMap()
+		t.Run("if element with key exists already, update its value but return the old value", func(t *testing.T) {
+			hashTable := hashing_solution.NewHashMap[string]()
 
 			timeNow := time.Now()
-			oldValue, isSet := hashTable.Set(45, "foo")
+			oldValue := hashTable.Set(45, "foo")
 			fmt.Println(time.Since(timeNow))
 
-			assert.Empty(t, oldValue)
-			assert.True(t, isSet)
+			assert.Nil(t, oldValue)
 
-			oldValue, isSet = hashTable.Set(45, "bar")
-			assert.Equal(t, "foo", oldValue)
+			oldValue = hashTable.Set(45, "bar")
+			assert.Equal(t, "foo", *oldValue)
 
-			getValue, _ := hashTable.Get(45)
-			assert.Equal(t, "bar", getValue)
+			getValue := hashTable.Get(45)
+			assert.Equal(t, "bar", *getValue)
 		})
 	})
 	t.Run("Remove", func(t *testing.T) {
-		t.Run("remove key if exists at the head of linked list", func(t *testing.T) {
-			hashMap := hashing_solution.NewHashMap()
+		t.Run("remove key if exists at the head of linked list and return the removed value", func(t *testing.T) {
+			hashMap := hashing_solution.NewHashMap[string]()
 
 			hashMap.Set(45, "foo")
 			hashMap.Set(95, "foo2")
 			hashMap.Set(145, "foo3")
 
-			removedValue, isRemoved := hashMap.Remove(45)
-			assert.Equal(t, "foo", removedValue)
-			assert.True(t, isRemoved)
+			removedValue := hashMap.Remove(45)
+			assert.Equal(t, "foo", *removedValue)
 
-			getValue, isGot := hashMap.Get(45)
-			assert.Empty(t, getValue)
-			assert.False(t, isGot)
+			getValue := hashMap.Get(45)
+			assert.Nil(t, getValue)
 		})
-		t.Run("remove key if exists somewhere in the linked list", func(t *testing.T) {
-			hashMap := hashing_solution.NewHashMap()
+		t.Run("remove key if exists somewhere in the linked list and return the removed value", func(t *testing.T) {
+			hashMap := hashing_solution.NewHashMap[string]()
 
 			hashMap.Set(45, "foo")
 			hashMap.Set(95, "foo2")
@@ -123,25 +113,22 @@ func TestHashKeys(t *testing.T) {
 			hashMap.Set(195, "foo4")
 
 			timeNow := time.Now()
-			removedValue, isRemoved := hashMap.Remove(95)
+			removedValue := hashMap.Remove(95)
 			fmt.Println(time.Since(timeNow))
 
-			assert.Equal(t, "foo2", removedValue)
-			assert.True(t, isRemoved)
+			assert.Equal(t, "foo2", *removedValue)
 
-			getValue, isGot := hashMap.Get(55)
-			assert.Empty(t, getValue)
-			assert.False(t, isGot)
+			getValue := hashMap.Get(95)
+			assert.Nil(t, getValue)
 		})
-		t.Run("return empty string and false if key does not exist", func(t *testing.T) {
-			hashMap := hashing_solution.NewHashMap()
+		t.Run("return nil if key does not exist", func(t *testing.T) {
+			hashMap := hashing_solution.NewHashMap[string]()
 
 			hashMap.Set(45, "foo")
 			hashMap.Set(10, "foo2")
 
-			removedValue, isRemoved := hashMap.Remove(22)
-			assert.Empty(t, removedValue)
-			assert.False(t, isRemoved)
+			removedValue := hashMap.Remove(22)
+			assert.Nil(t, removedValue)
 		})
 	})
 }
