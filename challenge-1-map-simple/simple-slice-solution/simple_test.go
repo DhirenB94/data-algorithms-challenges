@@ -11,7 +11,7 @@ import (
 func TestSimplekeyValue(t *testing.T) {
 	t.Run("Has", func(t *testing.T) {
 		t.Run("returns true if element is present", func(t *testing.T) {
-			sliceKeyValues := simple.NewSliceKeyValues[int, string]()
+			sliceKeyValues := simple.NewSliceKeyValues[string]()
 
 			sliceKeyValues.Set(5, "foo")
 			sliceKeyValues.Set(10, "bar")
@@ -20,7 +20,7 @@ func TestSimplekeyValue(t *testing.T) {
 			assert.True(t, has)
 		})
 		t.Run("returns false if element is not present", func(t *testing.T) {
-			sliceKeyValues := simple.NewSliceKeyValues[int, string]()
+			sliceKeyValues := simple.NewSliceKeyValues[string]()
 
 			sliceKeyValues.Set(5, "foo")
 			sliceKeyValues.Set(10, "bar")
@@ -31,7 +31,7 @@ func TestSimplekeyValue(t *testing.T) {
 	})
 	t.Run("Get", func(t *testing.T) {
 		t.Run("gets the value if key present", func(t *testing.T) {
-			sliceKeyValues := simple.NewSliceKeyValues[int, string]()
+			sliceKeyValues := simple.NewSliceKeyValues[string]()
 			expectedValue := "bar"
 
 			sliceKeyValues.Set(45, "foo")
@@ -44,7 +44,7 @@ func TestSimplekeyValue(t *testing.T) {
 			assert.Equal(t, &expectedValue, value)
 		})
 		t.Run("returns nil if key not present", func(t *testing.T) {
-			sliceKeyValues := simple.NewSliceKeyValues[int, string]()
+			sliceKeyValues := simple.NewSliceKeyValues[string]()
 
 			sliceKeyValues.Set(45, "foo")
 			sliceKeyValues.Set(50, "bar")
@@ -55,7 +55,7 @@ func TestSimplekeyValue(t *testing.T) {
 	})
 	t.Run("Remove", func(t *testing.T) {
 		t.Run("removes the element with given key", func(t *testing.T) {
-			sliceKeyValues := simple.NewSliceKeyValues[int, string]()
+			sliceKeyValues := simple.NewSliceKeyValues[string]()
 			expectedRemovedValue := "foo"
 
 			sliceKeyValues.Set(45, "foo")
@@ -71,7 +71,7 @@ func TestSimplekeyValue(t *testing.T) {
 			assert.False(t, has)
 		})
 		t.Run("if element is not present, returns nil", func(t *testing.T) {
-			sliceKeyValues := simple.NewSliceKeyValues[int, string]()
+			sliceKeyValues := simple.NewSliceKeyValues[string]()
 
 			sliceKeyValues.Set(45, "foo")
 			sliceKeyValues.Set(50, "bar")
@@ -82,7 +82,7 @@ func TestSimplekeyValue(t *testing.T) {
 	})
 	t.Run("Set", func(t *testing.T) {
 		t.Run("if element does not exist, set the eleemnt and return nil", func(t *testing.T) {
-			sliceKeyValues := simple.NewSliceKeyValues[int, string]()
+			sliceKeyValues := simple.NewSliceKeyValues[string]()
 
 			has := sliceKeyValues.Has(100)
 			assert.False(t, has)
@@ -97,7 +97,7 @@ func TestSimplekeyValue(t *testing.T) {
 			assert.True(t, has)
 		})
 		t.Run("if element with key exists already, update its value and return the old value", func(t *testing.T) {
-			sliceKeyValues := simple.NewSliceKeyValues[int, string]()
+			sliceKeyValues := simple.NewSliceKeyValues[string]()
 			initialValue := "abc"
 			expectedNewValue := "def"
 

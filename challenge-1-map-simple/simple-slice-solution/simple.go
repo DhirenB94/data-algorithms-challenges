@@ -5,27 +5,27 @@ import (
 	"fmt"
 )
 
-type simpleKeyValue[K comparable, V any] struct {
-	key   K
+type simpleKeyValue[V any] struct {
+	key   int
 	value V
 }
 
-type sliceKeyValues[K comparable, V any] struct {
-	keyValues []simpleKeyValue[K, V]
+type sliceKeyValues[V any] struct {
+	keyValues []simpleKeyValue[V]
 }
 
-func NewSliceKeyValues[K comparable, V any]() interfaces.Operations[K, V] {
-	return &sliceKeyValues[K, V]{}
+func NewSliceKeyValues[V any]() interfaces.Operations[V] {
+	return &sliceKeyValues[V]{}
 }
 
-func (s *sliceKeyValues[K, V]) Has(key K) bool {
+func (s *sliceKeyValues[V]) Has(key int) bool {
 	if s.indexOf(key) == -1 {
 		return false
 	}
 	return true
 }
 
-func (s *sliceKeyValues[K, V]) Get(key K) *V {
+func (s *sliceKeyValues[V]) Get(key int) *V {
 	for _, k := range s.keyValues {
 		if k.key == key {
 			return &k.value
@@ -34,7 +34,7 @@ func (s *sliceKeyValues[K, V]) Get(key K) *V {
 	return nil
 }
 
-func (s *sliceKeyValues[K, V]) Remove(key K) *V {
+func (s *sliceKeyValues[V]) Remove(key int) *V {
 	keyIndex := s.indexOf(key)
 	if keyIndex == -1 {
 		return nil
@@ -45,10 +45,10 @@ func (s *sliceKeyValues[K, V]) Remove(key K) *V {
 	return value
 }
 
-func (s *sliceKeyValues[K, V]) Set(key K, value V) *V {
+func (s *sliceKeyValues[V]) Set(key int, value V) *V {
 	keyIndex := s.indexOf(key)
 	if keyIndex == -1 {
-		s.keyValues = append(s.keyValues, simpleKeyValue[K, V]{
+		s.keyValues = append(s.keyValues, simpleKeyValue[V]{
 			key:   key,
 			value: value,
 		})
@@ -59,7 +59,7 @@ func (s *sliceKeyValues[K, V]) Set(key K, value V) *V {
 	return oldValue
 }
 
-func (s *sliceKeyValues[K, V]) indexOf(key K) int {
+func (s *sliceKeyValues[V]) indexOf(key int) int {
 	for i, k := range s.keyValues {
 		if k.key == key {
 			return i
@@ -68,6 +68,6 @@ func (s *sliceKeyValues[K, V]) indexOf(key K) int {
 	return -1
 }
 
-func (s *sliceKeyValues[K, V]) String() string {
+func (s *sliceKeyValues[V]) String() string {
 	return fmt.Sprint("KeyValues", s.keyValues)
 }
