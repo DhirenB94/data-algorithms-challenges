@@ -5,62 +5,58 @@ import (
 	"fmt"
 )
 
-type treeNode struct {
+type treeNode[T any] struct {
 	key       int
-	value     string
-	leftNode  *treeNode
-	rightNode *treeNode
+	value     T
+	leftNode  *treeNode[T]
+	rightNode *treeNode[T]
 }
 
-type binarySearchTree struct {
-	root *treeNode
+type binarySearchTree[T any] struct {
+	root *treeNode[T]
 }
 
-func NewBinarySearchTree() interfaces.Operations {
-	return &binarySearchTree{root: &treeNode{}}
+func NewBinarySearchTree[T any]() interfaces.Operations[T] {
+	return &binarySearchTree[T]{root: &treeNode[T]{}}
 }
 
-func (bst *binarySearchTree) Has(key int) bool {
+func (bst *binarySearchTree[T]) Has(key int) bool {
 	_, isPresent := searchNode(bst.root, key)
 	return isPresent
 }
 
-func (bst *binarySearchTree) Get(key int) (string, bool) {
-	return searchNode(bst.root, key)
+func (bst *binarySearchTree[T]) Get(key int) *T {
+	gotNode, _ := searchNode(bst.root, key)
+	return gotNode
 }
 
-func (bst *binarySearchTree) Set(key int, value string) (string, bool) {
-	newNode := &treeNode{
+func (bst *binarySearchTree[T]) Set(key int, value T) *T {
+	newNode := &treeNode[T]{
 		key:   key,
 		value: value,
 	}
 	if bst.root == nil {
 		bst.root = newNode
-		return "", true
+		return nil
 	}
 	return insertNode(bst.root, key, value)
 }
 
-func (bst *binarySearchTree) Remove(key int) (string, bool) {
-	getValue, isGot := bst.Get(key)
-	if !isGot {
-		return "", false
-	}
-	removeNode(bst.root, key)
-	return getValue, true
+func (bst *binarySearchTree[T]) Remove(key int) *T {
+	return removeNode(bst.root, key)
 }
 
-func (bst *binarySearchTree) String() string {
+func (bst *binarySearchTree[T]) String() string {
 	return fmt.Sprint("Root", bst.root)
 }
 
-func searchNode(treeNode *treeNode, key int) (string, bool) {
+func searchNode[T any](treeNode *treeNode[T], key int) (*T, bool) {
 	//in the case of an empty BST or when you reach a leaf node
 	if treeNode == nil {
-		return "", false
+		return nil, false
 	}
 	if key == treeNode.key {
-		return treeNode.value, true
+		return &treeNode.value, true
 	}
 	//if key is smaller than the key of the current node, keep searching to the left
 	if key < treeNode.key {
@@ -70,11 +66,11 @@ func searchNode(treeNode *treeNode, key int) (string, bool) {
 	if key > treeNode.key {
 		return searchNode(treeNode.rightNode, key)
 	}
-	return "", false
+	return nil, false
 }
 
-func insertNode(node *treeNode, key int, value string) (string, bool) {
-	newNode := &treeNode{
+func insertNode[T any](node *treeNode[T], key int, value T) *T {
+	newNode := &treeNode[T]{
 		key:   key,
 		value: value,
 	}
@@ -83,48 +79,53 @@ func insertNode(node *treeNode, key int, value string) (string, bool) {
 	if key == node.key {
 		oldValue := node.value
 		node.value = value
-		return oldValue, true
+		return &oldValue
 	}
 	if key < node.key {
 		if node.leftNode == nil {
 			node.leftNode = newNode
-			return "", true
+			return nil
 		}
 		return insertNode(node.leftNode, key, value)
 	}
 	if key > node.key {
 		if node.rightNode == nil {
 			node.rightNode = newNode
-			return "", true
+			return nil
 		}
 		return insertNode(node.rightNode, key, value)
 	}
-	return "", false
+	return nil
 }
 
-func removeNode(node *treeNode, key int) *treeNode {
+func removeNode[T any](node *treeNode[T], key int) *T {
 	if node == nil {
 		return nil
 	}
 	//Finding the key
 	if key < node.key {
-		node.leftNode = removeNode(node.leftNode, key)
+		return removeNode(node.leftNode, key)
 	}
 	if key > node.key {
-		node.rightNode = removeNode(node.rightNode, key)
+		return removeNode(node.rightNode, key)
 	}
 	if key == node.key {
 		//if the node to be removed is a leaf node
 		if node.leftNode == nil && node.rightNode == nil {
+			removedValue := node.value
 			node = nil
-			return nil
+			return &removedValue
 		}
 		//if the node to be removed has a L/R subtree only
 		if node.leftNode == nil {
+			removedValue := node.value
 			node = node.rightNode
+			return &removedValue
 		}
 		if node.rightNode == nil {
+			removedValue := node.value
 			node = node.leftNode
+			return &removedValue
 		}
 		//if the node to be removed has BOTH subtrees
 		if node.leftNode != nil && node.rightNode != nil {
@@ -133,15 +134,15 @@ func removeNode(node *treeNode, key int) *treeNode {
 			//copy the smallest node found to the node to be removed
 			node.key = smallestNode.key
 			node.value = smallestNode.value
-			//the smallest node will always either be a leaf node or have a max of 1 child (in this case 1 right child only)
-			//call the remove method on it, but start from the right node of the original (as youve copied smallest node to the original, it would re-enter the loop)
-			node.rightNode = removeNode(node.rightNode, smallestNode.key)
+			//remove the smallest node from the right subtree
+			removedValue := removeNode(node.rightNode, smallestNode.key)
+			return removedValue
 		}
 	}
-	return node
+	return nil
 }
 
-func smallestNode(node *treeNode) *treeNode {
+func smallestNode[T any](node *treeNode[T]) *treeNode[T] {
 	for node.leftNode != nil {
 		node = node.leftNode
 	}
