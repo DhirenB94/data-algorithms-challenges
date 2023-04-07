@@ -5,26 +5,22 @@ import (
 	"fmt"
 )
 
-type node[T any] struct {
-	key   int
-	value T
-	next  *node[T]
+type node[K, V interfaces.CustomType] struct {
+	key   K
+	value V
+	next  *node[K, V]
 }
 
-type hashMap[T any] struct {
-	buckets []*node[T]
+type hashMap[K, V interfaces.CustomType] struct {
+	buckets []*node[K, V]
 }
 
-func NewHashMap[T any]() interfaces.Operations[T] {
-	return &hashMap[T]{buckets: make([]*node[T], 50)}
+func NewHashMap[K, V interfaces.CustomType]() interfaces.Operations[K, V] {
+	return &hashMap[K, V]{buckets: make([]*node[K, V], 50)}
 }
 
-func hash(key int) int {
-	return key % 50
-}
-
-func (h *hashMap[T]) Has(key int) bool {
-	indexPosition := hash(key)
+func (h *hashMap[K, V]) Has(key K) bool {
+	indexPosition := key.HashMe()
 	if h.buckets[indexPosition] != nil {
 		//iterate through all elements in the list at that index position
 		firstNodeInList := h.buckets[indexPosition]
@@ -37,8 +33,8 @@ func (h *hashMap[T]) Has(key int) bool {
 	return false
 }
 
-func (h *hashMap[T]) Get(key int) *T {
-	indexPosition := hash(key)
+func (h *hashMap[K, V]) Get(key K) *V {
+	indexPosition := key.HashMe()
 	if h.buckets[indexPosition] != nil {
 		//check if it is in the linked list of the index position
 		firstNodeInList := h.buckets[indexPosition]
@@ -51,9 +47,9 @@ func (h *hashMap[T]) Get(key int) *T {
 	return nil
 }
 
-func (h *hashMap[T]) Set(key int, value T) *T {
-	index := hash(key)
-	newNode := &node[T]{
+func (h *hashMap[K, V]) Set(key K, value V) *V {
+	index := key.HashMe()
+	newNode := &node[K, V]{
 		key:   key,
 		value: value,
 	}
@@ -80,8 +76,8 @@ func (h *hashMap[T]) Set(key int, value T) *T {
 	return nil
 }
 
-func (h *hashMap[T]) Remove(key int) *T {
-	indexPosition := hash(key)
+func (h *hashMap[K, V]) Remove(key K) *V {
+	indexPosition := key.HashMe()
 	oldValue := h.Get(key)
 	//handle when you need to remove the 1st node in the list
 	if h.buckets[indexPosition] != nil && h.buckets[indexPosition].key == key {
@@ -98,6 +94,6 @@ func (h *hashMap[T]) Remove(key int) *T {
 	return nil
 }
 
-func (h *hashMap[T]) String() string {
+func (h *hashMap[K, V]) String() string {
 	return fmt.Sprint("Bucket", h.buckets)
 }

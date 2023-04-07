@@ -1,6 +1,9 @@
 package interfaces
 
-import "golang.org/x/exp/constraints"
+import (
+	"golang.org/x/exp/constraints"
+	"hash/fnv"
+)
 
 type Operations[K, V CustomType] interface {
 	Has(key K) bool
@@ -12,4 +15,20 @@ type Operations[K, V CustomType] interface {
 
 type CustomType interface {
 	constraints.Ordered
+	HashMe() int
+}
+
+type MyCustomInt int
+
+func (mci MyCustomInt) HashMe() int {
+	return int(mci % 50)
+}
+
+type MyCustomString string
+
+func (mcs MyCustomString) HashMe() int {
+	hash := fnv.New32a()
+	hash.Write([]byte(mcs))
+	hashValue := int(hash.Sum32())
+	return hashValue % 50
 }
