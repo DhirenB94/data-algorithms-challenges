@@ -5,33 +5,33 @@ import (
 	"fmt"
 )
 
-type treeNode[T any] struct {
-	key       int
-	value     T
-	leftNode  *treeNode[T]
-	rightNode *treeNode[T]
+type treeNode[K, V interfaces.CustomType] struct {
+	key       K
+	value     V
+	leftNode  *treeNode[K, V]
+	rightNode *treeNode[K, V]
 }
 
-type binarySearchTree[T any] struct {
-	root *treeNode[T]
+type binarySearchTree[K, V interfaces.CustomType] struct {
+	root *treeNode[K, V]
 }
 
-func NewBinarySearchTree[T any]() interfaces.Operations[T] {
-	return &binarySearchTree[T]{root: &treeNode[T]{}}
+func NewBinarySearchTree[K, V interfaces.CustomType]() interfaces.Operations[K, V] {
+	return &binarySearchTree[K, V]{root: &treeNode[K, V]{}}
 }
 
-func (bst *binarySearchTree[T]) Has(key int) bool {
+func (bst *binarySearchTree[K, V]) Has(key K) bool {
 	_, isPresent := searchNode(bst.root, key)
 	return isPresent
 }
 
-func (bst *binarySearchTree[T]) Get(key int) *T {
+func (bst *binarySearchTree[K, V]) Get(key K) *V {
 	gotNode, _ := searchNode(bst.root, key)
 	return gotNode
 }
 
-func (bst *binarySearchTree[T]) Set(key int, value T) *T {
-	newNode := &treeNode[T]{
+func (bst *binarySearchTree[K, V]) Set(key K, value V) *V {
+	newNode := &treeNode[K, V]{
 		key:   key,
 		value: value,
 	}
@@ -42,15 +42,15 @@ func (bst *binarySearchTree[T]) Set(key int, value T) *T {
 	return insertNode(bst.root, key, value)
 }
 
-func (bst *binarySearchTree[T]) Remove(key int) *T {
+func (bst *binarySearchTree[K, V]) Remove(key K) *V {
 	return removeNode(bst.root, key)
 }
 
-func (bst *binarySearchTree[T]) String() string {
+func (bst *binarySearchTree[K, V]) String() string {
 	return fmt.Sprint("Root", bst.root)
 }
 
-func searchNode[T any](treeNode *treeNode[T], key int) (*T, bool) {
+func searchNode[K, V interfaces.CustomType](treeNode *treeNode[K, V], key K) (*V, bool) {
 	//in the case of an empty BST or when you reach a leaf node
 	if treeNode == nil {
 		return nil, false
@@ -69,8 +69,8 @@ func searchNode[T any](treeNode *treeNode[T], key int) (*T, bool) {
 	return nil, false
 }
 
-func insertNode[T any](node *treeNode[T], key int, value T) *T {
-	newNode := &treeNode[T]{
+func insertNode[K, V interfaces.CustomType](node *treeNode[K, V], key K, value V) *V {
+	newNode := &treeNode[K, V]{
 		key:   key,
 		value: value,
 	}
@@ -98,7 +98,7 @@ func insertNode[T any](node *treeNode[T], key int, value T) *T {
 	return nil
 }
 
-func removeNode[T any](node *treeNode[T], key int) *T {
+func removeNode[K, V interfaces.CustomType](node *treeNode[K, V], key K) *V {
 	if node == nil {
 		return nil
 	}
@@ -142,7 +142,7 @@ func removeNode[T any](node *treeNode[T], key int) *T {
 	return nil
 }
 
-func smallestNode[T any](node *treeNode[T]) *treeNode[T] {
+func smallestNode[K, V interfaces.CustomType](node *treeNode[K, V]) *treeNode[K, V] {
 	for node.leftNode != nil {
 		node = node.leftNode
 	}
