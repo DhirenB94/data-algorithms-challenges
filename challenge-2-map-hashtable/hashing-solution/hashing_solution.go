@@ -1,7 +1,7 @@
 package hashing_solution
 
 import (
-	interfaces "data"
+	interfaces "data/common-interfaces"
 	"fmt"
 )
 

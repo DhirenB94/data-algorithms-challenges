@@ -1,8 +1,8 @@
 package simple_test
 
 import (
-	interfaces "data"
 	"data/challenge-1-map-simple/simple-slice-solution"
+	interfaces "data/common-interfaces"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"

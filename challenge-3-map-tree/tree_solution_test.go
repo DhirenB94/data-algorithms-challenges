@@ -1,8 +1,8 @@
 package tree_test
 
 import (
-	interfaces "data"
 	tree "data/challenge-3-map-tree"
+	interfaces "data/common-interfaces"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

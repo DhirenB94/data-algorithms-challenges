@@ -1,7 +1,7 @@
 package tree
 
 import (
-	interfaces "data"
+	interfaces "data/common-interfaces"
 	"fmt"
 )
 

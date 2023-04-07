@@ -1,8 +1,8 @@
 package hashing_solution_test
 
 import (
-	interfaces "data"
 	"data/challenge-2-map-hashtable/hashing-solution"
+	interfaces "data/common-interfaces"
 	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
