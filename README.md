@@ -66,4 +66,8 @@ Create a thread-safe layer that accepts (wraps) any of your map solutions and ma
 
 Amend the code in your main with a test to show that it using your wrapper indeed thread-safe
 
-Does the thread safe solution degrades the performance in single-threaded environment? Amend your main function with a test that shows if it does.
+Does the thread safe solution degrades the performance in single-threaded environment?
+
+## 5. Task: Generics
+
+Modify your interface (and all your implementations) to accept any compatible type as Key and any type for Value. To do so, you will need to use Generics and Type Constraints.
